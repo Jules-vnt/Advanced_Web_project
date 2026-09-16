@@ -1,0 +1,92 @@
+[
+  {
+    "center_id": 1,
+    "name": "EcoRecycle Hub Paris Nord",
+    "city": "Paris",
+    "address": "12 Rue de la Chapelle",
+    "capacity_tons": 2500.0,
+    "opening_date": "2018-03-15",
+    "is_active": true
+  },
+  {
+    "center_id": 2,
+    "name": "Centre de Tri de Lyon Gerland",
+    "city": "Lyon",
+    "address": "45 Rue Marcel Mérieux",
+    "capacity_tons": 1800.0,
+    "opening_date": "2019-06-01",
+    "is_active": true
+  },
+  {
+    "center_id": 3,
+    "name": "Marseille Recyclage Littoral",
+    "city": "Marseille",
+    "address": "8 Boulevard National",
+    "capacity_tons": 2200.0,
+    "opening_date": "2017-09-20",
+    "is_active": true
+  },
+  {
+    "center_id": 4,
+    "name": "Bordeaux Ouest Valorisation",
+    "city": "Bordeaux",
+    "address": "19 Avenue de la Jallère",
+    "capacity_tons": 1400.0,
+    "opening_date": "2020-01-10",
+    "is_active": true
+  },
+  {
+    "center_id": 5,
+    "name": "Toulouse Sud Traitement Vert",
+    "city": "Toulouse",
+    "address": "3 Rue Paulin Talabot",
+    "capacity_tons": 1650.0,
+    "opening_date": "2021-04-12",
+    "is_active": true
+  },
+  {
+    "center_id": 6,
+    "name": "Nantes Métropole Valorisation",
+    "city": "Nantes",
+    "address": "77 Boulevard de la Prairie",
+    "capacity_tons": 1300.0,
+    "opening_date": "2020-11-05",
+    "is_active": true
+  },
+  {
+    "center_id": 7,
+    "name": "Lille Flandres Tri Moderne",
+    "city": "Lille",
+    "address": "102 Rue Jean Jaurès",
+    "capacity_tons": 1950.0,
+    "opening_date": "2016-08-18",
+    "is_active": true
+  },
+  {
+    "center_id": 8,
+    "name": "Strasbourg Eco-Plaine",
+    "city": "Strasbourg",
+    "address": "14 Route du Rhin",
+    "capacity_tons": 1100.0,
+    "opening_date": "2022-02-28",
+    "is_active": true
+  },
+  {
+    "center_id": 9,
+    "name": "Nice Provence Recyclage",
+    "city": "Nice",
+    "address": "61 Corniche des Cévennes",
+    "capacity_tons": 1250.0,
+    "opening_date": "2019-10-14",
+    "is_active": true
+  },
+  {
+    "center_id": 10,
+    "name": "Rennes Bretagne Traitement",
+    "city": "Rennes",
+    "address": "28 Rue de Lorient",
+    "capacity_tons": 1500.0,
+    "opening_date": "2021-07-01",
+    "is_active": true
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "collection_id": 1,
+    "waste_type_id": 1,
+    "quantity_kg": 350.5,
+    "is_sorted": true
+  },
+  {
+    "collection_id": 1,
+    "waste_type_id": 3,
+    "quantity_kg": 520.0,
+    "is_sorted": true
+  },
+  {
+    "collection_id": 2,
+    "waste_type_id": 2,
+    "quantity_kg": 890.0,
+    "is_sorted": true
+  },
+  {
+    "collection_id": 2,
+    "waste_type_id": 10,
+    "quantity_kg": 410.0,
+    "is_sorted": false
+  },
+  {
+    "collection_id": 3,
+    "waste_type_id": 1,
+    "quantity_kg": 280.0,
+    "is_sorted": true
+  },
+  {
+    "collection_id": 3,
+    "waste_type_id": 5,
+    "quantity_kg": 145.2,
+    "is_sorted": true
+  },
+  {
+    "collection_id": 4,
+    "waste_type_id": 2,
+    "quantity_kg": 750.0,
+    "is_sorted": true
+  },
+  {
+    "collection_id": 4,
+    "waste_type_id": 4,
+    "quantity_kg": 310.0,
+    "is_sorted": true
+  },
+  {
+    "collection_id": 5,
+    "waste_type_id": 6,
+    "quantity_kg": 620.0,
+    "is_sorted": true
+  },
+  {
+    "collection_id": 6,
+    "waste_type_id": 3,
+    "quantity_kg": 480.0,
+    "is_sorted": true
+  },
+  {
+    "collection_id": 7,
+    "waste_type_id": 1,
+    "quantity_kg": 210.0,
+    "is_sorted": true
+  },
+  {
+    "collection_id": 7,
+    "waste_type_id": 9,
+    "quantity_kg": 115.0,
+    "is_sorted": true
+  }
+]
