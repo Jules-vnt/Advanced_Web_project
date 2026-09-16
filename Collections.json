@@ -1,0 +1,92 @@
+[
+  {
+    "collection_id": 1,
+    "point_id": 1,
+    "center_id": 1,
+    "collection_date": "2026-09-01",
+    "vehicle_plate": "AB-123-CD",
+    "driver_name": "Marc Dupont",
+    "status": "completed"
+  },
+  {
+    "collection_id": 2,
+    "point_id": 2,
+    "center_id": 1,
+    "collection_date": "2026-09-02",
+    "vehicle_plate": "AB-123-CD",
+    "driver_name": "Marc Dupont",
+    "status": "completed"
+  },
+  {
+    "collection_id": 3,
+    "point_id": 3,
+    "center_id": 2,
+    "collection_date": "2026-09-03",
+    "vehicle_plate": "EF-456-GH",
+    "driver_name": "Claire Vasseur",
+    "status": "completed"
+  },
+  {
+    "collection_id": 4,
+    "point_id": 4,
+    "center_id": 3,
+    "collection_date": "2026-09-04",
+    "vehicle_plate": "IJ-789-KL",
+    "driver_name": "Karim Benali",
+    "status": "completed"
+  },
+  {
+    "collection_id": 5,
+    "point_id": 5,
+    "center_id": 3,
+    "collection_date": "2026-09-05",
+    "vehicle_plate": "IJ-789-KL",
+    "driver_name": "Karim Benali",
+    "status": "completed"
+  },
+  {
+    "collection_id": 6,
+    "point_id": 6,
+    "center_id": 4,
+    "collection_date": "2026-09-06",
+    "vehicle_plate": "MN-012-OP",
+    "driver_name": "Sophie Martin",
+    "status": "completed"
+  },
+  {
+    "collection_id": 7,
+    "point_id": 7,
+    "center_id": 5,
+    "collection_date": "2026-09-07",
+    "vehicle_plate": "QR-345-ST",
+    "driver_name": "Lucas Mercier",
+    "status": "completed"
+  },
+  {
+    "collection_id": 8,
+    "point_id": 8,
+    "center_id": 6,
+    "collection_date": "2026-09-08",
+    "vehicle_plate": "UV-678-WX",
+    "driver_name": "Julien Moreau",
+    "status": "in_progress"
+  },
+  {
+    "collection_id": 9,
+    "point_id": 9,
+    "center_id": 7,
+    "collection_date": "2026-09-09",
+    "vehicle_plate": "YZ-901-AB",
+    "driver_name": "Thomas Leroux",
+    "status": "planned"
+  },
+  {
+    "collection_id": 10,
+    "point_id": 10,
+    "center_id": 8,
+    "collection_date": "2026-09-10",
+    "vehicle_plate": "CD-234-EF",
+    "driver_name": "Nicolas Petit",
+    "status": "planned"
+  }
+]
