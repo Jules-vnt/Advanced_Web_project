@@ -1,0 +1,82 @@
+[
+  {
+    "waste_type_id": 1,
+    "label": "PET Plastic Bottles",
+    "category": "plastic",
+    "is_recyclable": true,
+    "price_per_ton": 220.0,
+    "color_code": "#00A86B"
+  },
+  {
+    "waste_type_id": 2,
+    "label": "Clear Glass Bottles & Jars",
+    "category": "glass",
+    "is_recyclable": true,
+    "price_per_ton": 85.0,
+    "color_code": "#2E8B57"
+  },
+  {
+    "waste_type_id": 3,
+    "label": "Corrugated Cardboard",
+    "category": "cardboard",
+    "is_recyclable": true,
+    "price_per_ton": 140.0,
+    "color_code": "#8B5A2B"
+  },
+  {
+    "waste_type_id": 4,
+    "label": "Office & Newsprint Paper",
+    "category": "paper",
+    "is_recyclable": true,
+    "price_per_ton": 110.0,
+    "color_code": "#4682B4"
+  },
+  {
+    "waste_type_id": 5,
+    "label": "Aluminium Beverage Cans",
+    "category": "metal",
+    "is_recyclable": true,
+    "price_per_ton": 950.0,
+    "color_code": "#708090"
+  },
+  {
+    "waste_type_id": 6,
+    "label": "Organic Food Scraps",
+    "category": "organic",
+    "is_recyclable": true,
+    "price_per_ton": 45.0,
+    "color_code": "#556B2F"
+  },
+  {
+    "waste_type_id": 7,
+    "label": "Household Batteries & Accus",
+    "category": "hazardous",
+    "is_recyclable": true,
+    "price_per_ton": 600.0,
+    "color_code": "#B22222"
+  },
+  {
+    "waste_type_id": 8,
+    "label": "Used Textiles & Garments",
+    "category": "textile",
+    "is_recyclable": true,
+    "price_per_ton": 180.0,
+    "color_code": "#9370DB"
+  },
+  {
+    "waste_type_id": 9,
+    "label": "Electronic Small Appliances",
+    "category": "electronic",
+    "is_recyclable": true,
+    "price_per_ton": 420.0,
+    "color_code": "#FF8C00"
+  },
+  {
+    "waste_type_id": 10,
+    "label": "Non-Recyclable Residual Waste",
+    "category": "other",
+    "is_recyclable": false,
+    "price_per_ton": 25.0,
+    "color_code": "#2F4F4F"
+  }
+]
