@@ -1,0 +1,102 @@
+[
+  {
+    "point_id": 1,
+    "name": "Place de la République Eco-Point",
+    "point_type": "street_bin",
+    "address": "1 Place de la République",
+    "city": "Paris",
+    "latitude": 48.867566,
+    "longitude": 2.363843,
+    "center_id": 1
+  },
+  {
+    "point_id": 2,
+    "name": "Gare de Lyon Drop-off Point",
+    "point_type": "drop_off_center",
+    "address": "Pl. Louis-Armand",
+    "city": "Paris",
+    "latitude": 48.844304,
+    "longitude": 2.374377,
+    "center_id": 1
+  },
+  {
+    "point_id": 3,
+    "name": "Bellecour Containers",
+    "point_type": "container",
+    "address": "Place Bellecour",
+    "city": "Lyon",
+    "latitude": 45.757814,
+    "longitude": 4.832011,
+    "center_id": 2
+  },
+  {
+    "point_id": 4,
+    "name": "Vieux Port Tri Urbain",
+    "point_type": "street_bin",
+    "address": "34 Quai des Belges",
+    "city": "Marseille",
+    "latitude": 43.295251,
+    "longitude": 5.374491,
+    "center_id": 3
+  },
+  {
+    "point_id": 5,
+    "name": "Prado Drop Center",
+    "point_type": "drop_off_center",
+    "address": "120 Avenue du Prado",
+    "city": "Marseille",
+    "latitude": 43.27211,
+    "longitude": 5.38892,
+    "center_id": 3
+  },
+  {
+    "point_id": 6,
+    "name": "Quinconces Eco-Hub",
+    "point_type": "container",
+    "address": "Place des Quinconces",
+    "city": "Bordeaux",
+    "latitude": 44.8458,
+    "longitude": -0.5739,
+    "center_id": 4
+  },
+  {
+    "point_id": 7,
+    "name": "Capitole Eco-Point",
+    "point_type": "street_bin",
+    "address": "Place du Capitole",
+    "city": "Toulouse",
+    "latitude": 43.604652,
+    "longitude": 1.444209,
+    "center_id": 5
+  },
+  {
+    "point_id": 8,
+    "name": "Commerce Drop-off Zone",
+    "point_type": "drop_off_center",
+    "address": "Place du Commerce",
+    "city": "Nantes",
+    "latitude": 47.2133,
+    "longitude": -1.5583,
+    "center_id": 6
+  },
+  {
+    "point_id": 9,
+    "name": "Grand Place Tri Collectif",
+    "point_type": "container",
+    "address": "Grand Place",
+    "city": "Lille",
+    "latitude": 50.6369,
+    "longitude": 3.0633,
+    "center_id": 7
+  },
+  {
+    "point_id": 10,
+    "name": "Kleber Green Spot",
+    "point_type": "street_bin",
+    "address": "Place Kléber",
+    "city": "Strasbourg",
+    "latitude": 48.5834,
+    "longitude": 7.7455,
+    "center_id": 8
+  }
+]
