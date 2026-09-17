@@ -71,25 +71,25 @@ export default {
         {
           to: '/waste-types',
           label: 'List waste types',
-          icon: '🗂',
+        
           description: 'Categories of waste and how each one is recycled.'
         },
         {
           to: '/collection-points',
           label: 'List collection points',
-          icon: '📍',
+        
           description: 'Bins and drop-off locations across the city.'
         },
         {
           to: '/collections',
           label: 'List collections',
-          icon: '🚛',
+          
           description: 'Collection rounds with dates and collected quantities.'
         },
         {
           to: '/treatment-centers',
           label: 'List treatment centers',
-          icon: '🏭',
+          
           description: 'Sites where collected waste is sorted and processed.'
         }
       ]
