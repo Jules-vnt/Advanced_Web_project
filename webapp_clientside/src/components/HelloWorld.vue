@@ -44,6 +44,15 @@
     </header>
 
     <main class="container pb-5">
+      <section class="story-strip row g-3 mb-5" aria-label="Recycling in action">
+        <div v-for="image in images" :key="image.title" class="col-12 col-md-4">
+          <div class="story-image">
+            <img :src="image.src" :alt="image.alt">
+            <div class="story-caption">{{ image.title }}</div>
+          </div>
+        </div>
+      </section>
+
       <div class="row g-4">
         <div v-for="item in menuItems" :key="item.to" class="col-12 col-sm-6 col-lg-3">
           <router-link :to="item.to" class="card h-100 text-decoration-none entity-card">
@@ -67,29 +76,46 @@ export default {
   },
   data() {
     return {
+      images: [
+        {
+          title: 'Sort smarter',
+          alt: 'Sorted recycling containers',
+          src: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=900&q=80'
+        },
+        {
+          title: 'Collect locally',
+          alt: 'Recycling bins ready for collection',
+          src: 'https://images.unsplash.com/photo-1604187351574-c75ca79f5807?auto=format&fit=crop&w=900&q=80'
+        },
+        {
+          title: 'Give materials a future',
+          alt: 'Recycled materials prepared for reuse',
+          src: 'https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?auto=format&fit=crop&w=900&q=80'
+        }
+      ],
       menuItems: [
         {
           to: '/waste-types',
           label: 'List waste types',
-        
+          icon: '🗂',
           description: 'Categories of waste and how each one is recycled.'
         },
         {
           to: '/collection-points',
           label: 'List collection points',
-        
+          icon: '📍',
           description: 'Bins and drop-off locations across the city.'
         },
         {
           to: '/collections',
           label: 'List collections',
-          
+          icon: '🚛',
           description: 'Collection rounds with dates and collected quantities.'
         },
         {
           to: '/treatment-centers',
           label: 'List treatment centers',
-          
+          icon: '🏭',
           description: 'Sites where collected waste is sorted and processed.'
         }
       ]
@@ -121,6 +147,37 @@ export default {
 .entity-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.story-image {
+  position: relative;
+  overflow: hidden;
+  min-height: 180px;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.5rem 1.25rem rgba(20, 67, 45, 0.12);
+}
+
+.story-image img {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.story-image:hover img {
+  transform: scale(1.05);
+}
+
+.story-caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 2.5rem 1rem 0.8rem;
+  color: #fff;
+  font-weight: 700;
+  background: linear-gradient(transparent, rgba(12, 45, 30, 0.8));
 }
 
 .entity-icon {
