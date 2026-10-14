@@ -1,0 +1,112 @@
+[
+  {
+    "user_id": 1,
+    "username": "jvenot",
+    "email": "jvenot@recycling.example",
+    "password_hash": "$2b$10$aRxtoxziK6MoSmEyLWAvk.kra8fZiRB7CIgRYOCIkTWZfNMJ/KBHu",
+    "full_name": "Jules Venot",
+    "role": "manager",
+    "is_active": true,
+    "created_at": "2026-09-03"
+  },
+  {
+    "user_id": 2,
+    "username": "aberthelot",
+    "email": "aberthelot@recycling.example",
+    "password_hash": "$2b$10$HIQFIA3GsXTSeKJqWdB4nu4EnYh6Nkijbz/nrsEbz6HmRHbvgQw7q",
+    "full_name": "Amadeo Berthelot",
+    "role": "manager",
+    "is_active": true,
+    "created_at": "2026-09-03"
+  },
+  {
+    "user_id": 3,
+    "username": "hdaccache",
+    "email": "hdaccache@recycling.example",
+    "password_hash": "$2b$10$hP7eAUZ35qUSk93O2mAKKeGPSv8dZlBP.AsfPHARN3Qd5qnCqwcSm",
+    "full_name": "Hadi Daccache",
+    "role": "manager",
+    "is_active": true,
+    "created_at": "2026-09-03"
+  },
+  {
+    "user_id": 4,
+    "username": "mdupont",
+    "email": "mdupont@recycling.example",
+    "password_hash": "$2b$10$22jZEdnJGbzy1Ek9w2abseSAtoB3Uf7N2oDWpWbMawKjS2Usz1L/y",
+    "full_name": "Marc Dupont",
+    "role": "driver",
+    "is_active": true,
+    "created_at": "2026-09-05"
+  },
+  {
+    "user_id": 5,
+    "username": "cvasseur",
+    "email": "cvasseur@recycling.example",
+    "password_hash": "$2b$10$5F9PCwvwws.YxtXjCr9N4eMimBiuGj.OzA0r1X3cHf8SwDATF2.8q",
+    "full_name": "Claire Vasseur",
+    "role": "driver",
+    "is_active": true,
+    "created_at": "2026-09-05"
+  },
+  {
+    "user_id": 6,
+    "username": "kbenali",
+    "email": "kbenali@recycling.example",
+    "password_hash": "$2b$10$9BFvs3po30g9tNA10Y5md.fr.TwP3zfW.l3SXQawqvPR5H/sUUthO",
+    "full_name": "Karim Benali",
+    "role": "driver",
+    "is_active": true,
+    "created_at": "2026-09-06"
+  },
+  {
+    "user_id": 7,
+    "username": "smartin",
+    "email": "smartin@recycling.example",
+    "password_hash": "$2b$10$vu.n92hnJtnEEYPDVKQZS.zYx5FoKxcAPW9VE6cTGzJFKSLG5nEgC",
+    "full_name": "Sophie Martin",
+    "role": "driver",
+    "is_active": true,
+    "created_at": "2026-09-06"
+  },
+  {
+    "user_id": 8,
+    "username": "lmercier",
+    "email": "lmercier@recycling.example",
+    "password_hash": "$2b$10$jEpkqUt5Kb4UWPpeYun5fuhST1LStbVPut54GuOzHf3lkbqoDX2L.",
+    "full_name": "Lucas Mercier",
+    "role": "driver",
+    "is_active": true,
+    "created_at": "2026-09-07"
+  },
+  {
+    "user_id": 9,
+    "username": "jmoreau",
+    "email": "jmoreau@recycling.example",
+    "password_hash": "$2b$10$8gOFnf0INyimGeQVepPb1uTyAYE8dyZn5sZV9VGM1BDOoi3ipZE5y",
+    "full_name": "Julien Moreau",
+    "role": "driver",
+    "is_active": true,
+    "created_at": "2026-09-07"
+  },
+  {
+    "user_id": 10,
+    "username": "tleroux",
+    "email": "tleroux@recycling.example",
+    "password_hash": "$2b$10$l81cJw87Os6cwCqocTHjLuV2atihVMfBIkm0U9SSty0mteHiKM9R2",
+    "full_name": "Thomas Leroux",
+    "role": "driver",
+    "is_active": true,
+    "created_at": "2026-09-08"
+  },
+  {
+    "user_id": 11,
+    "username": "npetit",
+    "email": "npetit@recycling.example",
+    "password_hash": "$2b$10$xOTlh5LHD0akYgCW9QPhLOgUNeThjBo2pR2IqCi5i2BSUkcBj8WhS",
+    "full_name": "Nicolas Petit",
+    "role": "driver",
+    "is_active": true,
+    "created_at": "2026-09-08"
+  }
+]
