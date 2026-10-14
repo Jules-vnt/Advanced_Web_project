@@ -141,3 +141,10 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# macOS
+.DS_Store
+
+# npm must be run inside webapp_clientside/, not at the repo root
+/package-lock.json
+/node_modules/
