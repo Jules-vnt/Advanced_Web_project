@@ -1,20 +1,32 @@
 <template>
-  <nav v-if="$route.name !== 'home'" class="container py-3 text-start">
-    <router-link to="/">&larr; Home</router-link>
-  </nav>
-  <router-view/>
+  <AppNavbar />
+  <main>
+    <router-view />
+  </main>
+  <AppFooter />
 </template>
+
+<script>
+import AppNavbar from '@/components/AppNavbar.vue'
+import AppFooter from '@/components/AppFooter.vue'
+
+export default {
+  name: 'App',
+  components: {
+    AppNavbar,
+    AppFooter
+  }
+}
+</script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-nav a {
-  font-weight: bold;
-  color: #198754;
+main {
+  flex: 1;
 }
 </style>
