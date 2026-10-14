@@ -17,8 +17,8 @@
           <span class="text-muted">Type</span>
           <select v-model="typeFilter" class="form-select form-select-sm">
             <option value="">All types</option>
-            <option v-for="(label, type) in typeLabels" :key="type" :value="type">
-              {{ label }}
+            <option v-for="(t, type) in types" :key="type" :value="type">
+              {{ t.label }}
             </option>
           </select>
         </label>
@@ -42,8 +42,8 @@
               <td class="fw-semibold">{{ p.name }}</td>
               <td>
                 <span :class="['type-pill', p.point_type]">
-                  <i :class="['bi', typeIcons[p.point_type]]" aria-hidden="true"></i>
-                  {{ typeLabels[p.point_type] }}
+                  <i :class="['bi', types[p.point_type].icon]" aria-hidden="true"></i>
+                  {{ types[p.point_type].label }}
                 </span>
               </td>
               <td>
@@ -86,17 +86,12 @@ export default {
       points: [],
       centers: [],
       typeFilter: '',
-      typeLabels: {
-        street_bin: 'Street bin',
-        drop_off_center: 'Drop-off center',
-        container: 'Container',
-        business: 'Business'
-      },
-      typeIcons: {
-        street_bin: 'bi-trash3',
-        drop_off_center: 'bi-truck',
-        container: 'bi-box',
-        business: 'bi-shop'
+      // Values of the point_type ENUM
+      types: {
+        street_bin: { label: 'Street bin', icon: 'bi-trash3' },
+        drop_off_center: { label: 'Drop-off center', icon: 'bi-truck' },
+        container: { label: 'Container', icon: 'bi-box' },
+        business: { label: 'Business', icon: 'bi-shop' }
       }
     }
   },
