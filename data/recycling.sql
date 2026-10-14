@@ -80,6 +80,19 @@ CREATE TABLE collection_waste (
 );
 
 
+-- Users who can log in (drivers and managers); visitors need no account
+CREATE TABLE app_user (
+  user_id       INT AUTO_INCREMENT PRIMARY KEY,
+  username      VARCHAR(50) NOT NULL UNIQUE,
+  email         VARCHAR(120) NOT NULL UNIQUE,
+  password_hash CHAR(60) NOT NULL,
+  full_name     VARCHAR(100) NOT NULL,
+  role          ENUM('driver','manager') NOT NULL DEFAULT 'driver',
+  is_active     BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at    DATE NOT NULL
+);
+
+
 -- 1. Treatment Centers (10 records)
 INSERT INTO treatment_center (name, city, address, capacity_tons, opening_date, is_active) VALUES
 ('EcoRecycle Hub Paris Nord', 'Paris', '12 Rue de la Chapelle', 2500.00, '2018-03-15', TRUE),
@@ -150,3 +163,18 @@ INSERT INTO collection_waste (collection_id, waste_type_id, quantity_kg, is_sort
 (6, 3, 480.00, TRUE),   -- Bordeaux run 6: Cardboard
 (7, 1, 210.00, TRUE),   -- Toulouse run 7: Plastic
 (7, 9, 115.00, TRUE);   -- Toulouse run 7: Electronics
+
+
+-- 6. Users (11 records) - test password for every account: password123 (bcrypt hash)
+INSERT INTO app_user (username, email, password_hash, full_name, role, is_active, created_at) VALUES
+('jvenot', 'jvenot@recycling.example', '$2b$10$aRxtoxziK6MoSmEyLWAvk.kra8fZiRB7CIgRYOCIkTWZfNMJ/KBHu', 'Jules Venot', 'manager', TRUE, '2026-09-03'),
+('aberthelot', 'aberthelot@recycling.example', '$2b$10$HIQFIA3GsXTSeKJqWdB4nu4EnYh6Nkijbz/nrsEbz6HmRHbvgQw7q', 'Amadeo Berthelot', 'manager', TRUE, '2026-09-03'),
+('hdaccache', 'hdaccache@recycling.example', '$2b$10$hP7eAUZ35qUSk93O2mAKKeGPSv8dZlBP.AsfPHARN3Qd5qnCqwcSm', 'Hadi Daccache', 'manager', TRUE, '2026-09-03'),
+('mdupont', 'mdupont@recycling.example', '$2b$10$22jZEdnJGbzy1Ek9w2abseSAtoB3Uf7N2oDWpWbMawKjS2Usz1L/y', 'Marc Dupont', 'driver', TRUE, '2026-09-05'),
+('cvasseur', 'cvasseur@recycling.example', '$2b$10$5F9PCwvwws.YxtXjCr9N4eMimBiuGj.OzA0r1X3cHf8SwDATF2.8q', 'Claire Vasseur', 'driver', TRUE, '2026-09-05'),
+('kbenali', 'kbenali@recycling.example', '$2b$10$9BFvs3po30g9tNA10Y5md.fr.TwP3zfW.l3SXQawqvPR5H/sUUthO', 'Karim Benali', 'driver', TRUE, '2026-09-06'),
+('smartin', 'smartin@recycling.example', '$2b$10$vu.n92hnJtnEEYPDVKQZS.zYx5FoKxcAPW9VE6cTGzJFKSLG5nEgC', 'Sophie Martin', 'driver', TRUE, '2026-09-06'),
+('lmercier', 'lmercier@recycling.example', '$2b$10$jEpkqUt5Kb4UWPpeYun5fuhST1LStbVPut54GuOzHf3lkbqoDX2L.', 'Lucas Mercier', 'driver', TRUE, '2026-09-07'),
+('jmoreau', 'jmoreau@recycling.example', '$2b$10$8gOFnf0INyimGeQVepPb1uTyAYE8dyZn5sZV9VGM1BDOoi3ipZE5y', 'Julien Moreau', 'driver', TRUE, '2026-09-07'),
+('tleroux', 'tleroux@recycling.example', '$2b$10$l81cJw87Os6cwCqocTHjLuV2atihVMfBIkm0U9SSty0mteHiKM9R2', 'Thomas Leroux', 'driver', TRUE, '2026-09-08'),
+('npetit', 'npetit@recycling.example', '$2b$10$xOTlh5LHD0akYgCW9QPhLOgUNeThjBo2pR2IqCi5i2BSUkcBj8WhS', 'Nicolas Petit', 'driver', TRUE, '2026-09-08');

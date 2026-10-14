@@ -1,24 +1,15 @@
 # webapp_clientside
 
-## Project setup
-```
-npm install
-```
+Vue 3 frontend of the Waste & Recycling Management project.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Run every npm command **inside this folder**, not at the repo root.
 
-### Compiles and minifies for production
 ```
-npm run build
-```
-
-### Lints and fixes files
-```
+npm install      # first time, or after a pull that changes package.json
+npm run serve    # dev server on http://localhost:8080
+npm run build    # production build in dist/ (serve it, don't open index.html directly)
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+For now the pages read the fake data in `../data/*.json` (see `getAllData()` in each view).
+It will be replaced by `fetch()` calls once the Express server is ready.

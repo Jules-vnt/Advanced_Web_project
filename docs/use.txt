@@ -1,0 +1,32 @@
+webapp_clientside/
+├── package.json          → dépendances (vue, vue-router) + scripts npm
+├── package-lock.json     → versions exactes installées
+├── babel.config.js       → convertit le JS moderne pour les vieux navigateurs
+├── jsconfig.json         → aide VS Code (l'alias @ = src/)
+├── vue.config.js         → configuration de Vue CLI
+├── README.md             → README généré par Vue CLI (commandes npm)
+├── node_modules/         → (ignoré) dépendances installées
+├── dist/                 → (ignoré) version compilée après npm run build
+├── public/
+│   ├── index.html        → LA seule page HTML : charge Bootstrap, les icônes, les polices
+│   ├── style.css         → styles globaux + variables de couleurs (--ink, --moss, --accent…)
+│   ├── favicon.svg/.ico  → icône de l'onglet
+└── src/
+    ├── main.js           → point d'entrée : crée l'app Vue + branche le routeur
+    ├── App.vue           → squelette de toutes les pages : Navbar + contenu + Footer
+    ├── sections.js       → liste des 4 sections (lien, titre, image, description)
+    ├── router/
+    │   └── index.js      → table URL → page (/waste-types → WasteTypesView…)
+    ├── components/       → morceaux réutilisables
+    │   ├── AppNavbar.vue → barre de navigation
+    │   ├── AppFooter.vue → pied de page
+    │   └── PageHeader.vue→ bandeau image + titre en haut de chaque page
+    ├── views/            → une vue = une page (une route)
+    │   ├── HomeView.vue
+    │   ├── WasteTypesView.vue
+    │   ├── CollectionPointsView.vue
+    │   ├── CollectionsView.vue
+    │   ├── TreatmentCentersView.vue
+    │   ├── LoginView.vue   (vide pour l'instant, attend le serveur)
+    │   └── LogoutView.vue  (pareil)
+    └── assets/img/
