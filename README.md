@@ -10,6 +10,7 @@ A database and web application to manage household waste collection and recyclin
 
 ## Repository
 - `data/` – MySQL script (`recycling.sql`: drop + create + insert), fake JSON data (one file per table) and the ER / table diagrams (`recycling_diagrams.pdf`)
+- `docs/project_documents.pdf` – all documents in one PDF (use case diagram, two detailed use cases, database diagrams, Gantt)
 - `docs/diagrams/` – use case diagram and planned Gantt
 - `webapp_clientside/` – Vue.js frontend (pages: waste types, collection points, collections, treatment centers)
 
