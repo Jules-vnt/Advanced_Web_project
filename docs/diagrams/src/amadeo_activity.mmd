@@ -1,0 +1,48 @@
+---
+title: Activity – Carry out a collection round (UC-B, driver)
+config:
+  theme: base
+  themeVariables:
+    fontFamily: Helvetica, Arial, sans-serif
+    fontSize: 14px
+    lineColor: "#3d4a42"
+    primaryTextColor: "#1f2a24"
+    edgeLabelBackground: "#ffffff"
+  flowchart:
+    curve: basis
+    nodeSpacing: 34
+    rankSpacing: 34
+---
+flowchart TD
+  start(( )):::startN --> A1[Open the<br/>Collections page]:::driver
+  A1 --> S1[List today's<br/>planned collections]:::system
+  S1 --> A2[Arrive at the<br/>collection point]:::driver
+  A2 --> D1{Point<br/>accessible?}:::decision
+
+  D1 -- "no (extension)" --> A9[Report a problem]:::driver
+  A9 --> S9[Set status cancelled<br/>+ notify the manager]:::system
+
+  D1 -- yes --> A3[Set status<br/>“In progress”]:::driver
+  A3 --> S2[Save status<br/>in_progress]:::system
+  S2 --> A4[Add a waste line<br/>type · kg · sorted]:::driver
+  A4 --> D2{Line<br/>valid?}:::decision
+  D2 -- "no (3a duplicate type,<br/>3b kg ≤ 0)" --> S3[Show inline<br/>error message]:::system
+  S3 --> A4
+  D2 -- yes --> S4[Insert row in<br/>collection_waste<br/>+ recompute total]:::system
+  S4 --> D3{More<br/>waste?}:::decision
+  D3 -- yes --> A4
+  D3 -- no --> A5[Set status<br/>“Completed”]:::driver
+  A5 --> D4{At least<br/>one line?}:::decision
+  D4 -- "no (5a)" --> S5[Ask confirmation<br/>“empty bin”]:::system
+  D4 -- yes --> S6[Save completed<br/>+ update statistics]:::system
+  S5 --> S6
+  S6 --> D5{More points<br/>today?}:::decision
+  S9 --> D5
+  D5 -- yes --> A2
+  D5 -- no --> stop((( ))):::endN
+
+  classDef driver fill:#ffffff,stroke:#1f2a24,stroke-width:1.5px,color:#1f2a24,rx:10,ry:10
+  classDef system fill:#e3efe7,stroke:#2e5a40,stroke-width:1.5px,color:#1f2a24
+  classDef decision fill:#fff4d6,stroke:#9a7b1c,stroke-width:1.5px,color:#1f2a24
+  classDef startN fill:#1f2a24,stroke:#1f2a24
+  classDef endN fill:#1f2a24,stroke:#1f2a24

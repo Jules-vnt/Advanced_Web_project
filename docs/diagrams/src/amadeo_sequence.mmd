@@ -1,0 +1,60 @@
+---
+title: Sequence – Record a collected waste line (UC-B steps 3–4)
+config:
+  theme: base
+  themeVariables:
+    fontFamily: Helvetica, Arial, sans-serif
+    fontSize: 14px
+    actorBkg: "#e3efe7"
+    actorBorder: "#2e5a40"
+    actorTextColor: "#1f2a24"
+    actorLineColor: "#8b958f"
+    signalColor: "#1f2a24"
+    signalTextColor: "#1f2a24"
+    activationBkgColor: "#d6e8dc"
+    activationBorderColor: "#2e5a40"
+    labelBoxBkgColor: "#fff4d6"
+    labelBoxBorderColor: "#9a7b1c"
+    labelTextColor: "#1f2a24"
+    loopTextColor: "#1f2a24"
+    noteBkgColor: "#fffbe6"
+    noteBorderColor: "#b9a646"
+  sequence:
+    mirrorActors: false
+    messageMargin: 32
+---
+sequenceDiagram
+  autonumber
+  actor D as Driver
+  participant V as CollectionView<br/>(Vue page)
+  participant R as Express router
+  participant C as CollectionWaste<br/>Controller
+  participant Repo as CollectionWaste<br/>Repository
+  participant DB as MySQL<br/>(recycling)
+
+  D->>+V: choose waste type, kg, sorted<br/>and click "Add line"
+  V->>V: validate() – type chosen, kg > 0
+  V->>+R: fetch POST /api/collections/7/waste<br/>(waste_type_id, quantity_kg, is_sorted)
+  R->>+C: addWasteLine(req, res)
+  deactivate R
+  C->>+Repo: await insertLine(7, line)
+  Repo->>+DB: INSERT INTO collection_waste<br/>VALUES (?, ?, ?, ?)
+
+  alt insert succeeded
+    DB-->>Repo: affectedRows = 1
+    Repo-->>C: true
+    C-->>V: 201 Created + saved line (JSON)
+    V->>V: push line, recompute total
+    V-->>D: new row and updated total shown
+  else duplicate key (collection_id, waste_type_id) – flow 3a
+    DB-->>Repo: error ER_DUP_ENTRY
+    Repo-->>C: throw DuplicateLineError
+    C-->>V: 409 Conflict + message
+    V-->>D: inline error "already recorded,<br/>edit the existing line"
+  end
+  deactivate DB
+  deactivate Repo
+  deactivate C
+  deactivate V
+
+  Note over C,DB: The database refuses the duplicate itself:<br/>composite primary key of collection_waste
