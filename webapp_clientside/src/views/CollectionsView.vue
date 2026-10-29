@@ -23,20 +23,26 @@
         </li>
       </ul>
 
-      <div class="toolbar">
+      <div class="list-toolbar">
         <p class="text-muted mb-0">
           {{ filteredCollections.length }} of {{ collections.length }} collection rounds
         </p>
 
-        <label class="toolbar-filter">
-          <span class="text-muted">Status</span>
-          <select v-model="statusFilter" class="form-select form-select-sm">
-            <option value="">All statuses</option>
-            <option v-for="(label, status) in statuses" :key="status" :value="status">
-              {{ label }}
-            </option>
-          </select>
-        </label>
+        <div class="toolbar-right">
+          <label class="toolbar-filter">
+            <span class="text-muted">Status</span>
+            <select v-model="statusFilter" class="form-select form-select-sm">
+              <option value="">All statuses</option>
+              <option v-for="(label, status) in statuses" :key="status" :value="status">
+                {{ label }}
+              </option>
+            </select>
+          </label>
+
+          <router-link to="/collections/new" class="btn-brand">
+            <i class="bi bi-plus-lg" aria-hidden="true"></i> New collection
+          </router-link>
+        </div>
       </div>
 
       <div class="table-card">
@@ -51,6 +57,7 @@
               <th scope="col">Status</th>
               <th scope="col">Waste collected</th>
               <th scope="col" class="text-end">Total</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -83,6 +90,13 @@
                 <span v-else class="text-muted small">Nothing recorded yet</span>
               </td>
               <td class="text-end fw-semibold text-nowrap">{{ formatKg(collectionKg(c.collection_id)) }}</td>
+              <td>
+                <ItemActions
+                  base="/collections"
+                  :id="c.collection_id"
+                  :name="'collection ' + c.collection_id"
+                />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -94,6 +108,8 @@
 <script>
 import sections from '@/sections'
 import PageHeader from '@/components/PageHeader.vue'
+import ItemActions from '@/components/ItemActions.vue'
+import collectionStatuses from '@/enums/collectionStatuses'
 // Fake JSON data: same field names as the collection, collection_waste,
 // collection_point, treatment_center and waste_type tables
 import collectionsData from '../../../data/collections.json'
@@ -104,7 +120,7 @@ import wasteTypesData from '../../../data/waste_types.json'
 
 export default {
   name: 'CollectionsView',
-  components: { PageHeader },
+  components: { PageHeader, ItemActions },
   data() {
     return {
       section: sections.find((s) => s.name === 'collections'),
@@ -114,13 +130,7 @@ export default {
       centers: [],
       wasteTypes: [],
       statusFilter: '',
-      // Values of the status ENUM
-      statuses: {
-        planned: 'Planned',
-        in_progress: 'In progress',
-        completed: 'Completed',
-        cancelled: 'Cancelled'
-      }
+      statuses: collectionStatuses
     }
   },
   computed: {
@@ -215,13 +225,11 @@ export default {
   font-weight: 700;
 }
 
-.toolbar {
+.toolbar-right {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: 1rem;
 }
 
 .toolbar-filter {

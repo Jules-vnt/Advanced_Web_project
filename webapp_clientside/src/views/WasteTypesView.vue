@@ -8,7 +8,12 @@
     />
 
     <div class="container pb-5">
-      <p class="text-muted">{{ wasteTypes.length }} waste types in the database.</p>
+      <div class="list-toolbar">
+        <p class="text-muted mb-0">{{ wasteTypes.length }} waste types in the database.</p>
+        <router-link to="/waste-types/new" class="btn-brand">
+          <i class="bi bi-plus-lg" aria-hidden="true"></i> New waste type
+        </router-link>
+      </div>
 
       <ul class="bins">
         <li
@@ -37,6 +42,13 @@
                 </span>
               </dd>
             </dl>
+
+            <ItemActions
+              base="/waste-types"
+              :id="w.waste_type_id"
+              :name="w.label"
+              class="bin-actions"
+            />
           </div>
         </li>
       </ul>
@@ -47,28 +59,19 @@
 <script>
 import sections from '@/sections'
 import PageHeader from '@/components/PageHeader.vue'
+import ItemActions from '@/components/ItemActions.vue'
+import wasteCategories from '@/enums/wasteCategories'
 // Fake JSON data: same field names as the waste_type table in recycling.sql
 import wasteTypesData from '../../../data/waste_types.json'
 
 export default {
   name: 'WasteTypesView',
-  components: { PageHeader },
+  components: { PageHeader, ItemActions },
   data() {
     return {
       section: sections.find((s) => s.name === 'waste-types'),
       wasteTypes: [],
-      icons: {
-        plastic: 'bi-cup-straw',
-        glass: 'bi-cup',
-        paper: 'bi-newspaper',
-        cardboard: 'bi-box-seam',
-        metal: 'bi-nut',
-        organic: 'bi-flower1',
-        electronic: 'bi-plug',
-        textile: 'bi-bag',
-        hazardous: 'bi-exclamation-triangle',
-        other: 'bi-trash3'
-      }
+      icons: wasteCategories
     }
   },
   methods: {
@@ -141,6 +144,12 @@ export default {
   gap: 0.35rem 1rem;
   margin: 0;
   font-size: 0.9rem;
+}
+
+.bin-actions {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
 }
 
 .bin-facts dt {

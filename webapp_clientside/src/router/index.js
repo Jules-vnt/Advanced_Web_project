@@ -39,6 +39,13 @@ const routes = [
   }
 ]
 
+// Datasheet / new / edit routes: one file per entity in ./routes,
+// loaded automatically so each entity's routes can be added separately.
+const entityRoutes = require.context('./routes', false, /\.js$/)
+entityRoutes.keys().forEach((file) => {
+  routes.push(...entityRoutes(file).default)
+})
+
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
