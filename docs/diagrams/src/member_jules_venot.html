@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Member diagrams – Jules Venot</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Helvetica, Arial, sans-serif; color: #1f2a24; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 297mm; height: 210mm; padding: 10mm 12mm; display: flex; flex-direction: column; page-break-after: always; overflow: hidden; }
+  .page:last-child { page-break-after: auto; }
+  .top { display: flex; justify-content: space-between; font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: #6b746e; border-bottom: 1px solid #d5d9d6; padding-bottom: 4px; }
+  h1 { margin: 8px 0 2px; font-size: 20px; }
+  .sub { margin: 0 0 8px; font-size: 11px; color: #4d5650; }
+  .body { flex: 1; min-height: 0; }
+  .foot { font-size: 9px; color: #6b746e; border-top: 1px solid #d5d9d6; padding-top: 4px; display: flex; justify-content: space-between; }
+  svg { width: 100%; height: 100%; }
+
+  /* ---------- Wireframe (low fidelity, greyscale) ---------- */
+  .wf-wrap { display: grid; grid-template-columns: 1fr 255px; gap: 14px; height: 100%; }
+  .browser { border: 1.5px solid #333; border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; font-size: 10px; background: #fff; }
+  .chrome { display: flex; align-items: center; gap: 4px; padding: 4px 8px; background: #e6e6e6; border-bottom: 1px solid #999; }
+  .chrome i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid #777; display: inline-block; }
+  .url { margin-left: 8px; flex: 1; background: #fff; border: 1px solid #aaa; border-radius: 3px; padding: 1px 6px; font-family: monospace; font-size: 9px; }
+  .wf-nav { display: flex; align-items: center; gap: 6px; padding: 5px 10px; background: #444; color: #fff; }
+  .wf-nav .logo { font-weight: bold; margin-right: 10px; }
+  .wf-nav span.l { padding: 1px 5px; border: 1px solid #888; border-radius: 3px; font-size: 9px; }
+  .wf-nav span.on { background: #fff; color: #333; }
+  .wf-nav .sp { flex: 1; }
+  .hdr { position: relative; height: 48px; background: repeating-linear-gradient(45deg, #ececec 0 6px, #f6f6f6 6px 12px); border-bottom: 1px solid #bbb; display: flex; flex-direction: column; justify-content: center; padding: 0 12px; }
+  .hdr b { font-size: 15px; }
+  .content { padding: 6px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .back { font-size: 9px; text-decoration: underline; }
+  .row2 { display: grid; grid-template-columns: 1.1fr 1fr; gap: 10px; }
+  .box { position: relative; border: 1.3px solid #555; border-radius: 4px; padding: 6px 8px; }
+  .box h4 { margin: 0 0 4px; font-size: 10.5px; }
+  dl { margin: 0; display: grid; grid-template-columns: 88px 1fr; row-gap: 2px; font-size: 9.5px; }
+  dt { color: #666; } dd { margin: 0; font-weight: bold; }
+  .pill { display: inline-block; border: 1px solid #333; border-radius: 8px; padding: 0 6px; font-weight: normal; background: #ddd; }
+  .btns { display: flex; flex-direction: column; gap: 4px; }
+  .btn { border: 1.3px solid #333; border-radius: 4px; padding: 3px 6px; text-align: center; font-size: 9.5px; background: #f2f2f2; }
+  .btn.primary { background: #333; color: #fff; }
+  .btn.dashed { border-style: dashed; }
+  table { width: 100%; border-collapse: collapse; font-size: 9.5px; }
+  th { text-align: left; border-bottom: 1.3px solid #555; padding: 2px 4px; color: #555; font-weight: normal; }
+  td { border-bottom: 1px solid #ccc; padding: 3px 4px; }
+  td.r, th.r { text-align: right; }
+  .ctl { display: inline-block; border: 1px solid #777; border-radius: 3px; padding: 0 4px; background: #fff; }
+  .ico { display: inline-block; width: 13px; height: 13px; border: 1px solid #777; border-radius: 3px; text-align: center; line-height: 11px; font-size: 8px; }
+  .addrow td { background: #f4f4f4; }
+  .err { border: 1.3px dashed #333; border-radius: 4px; padding: 3px 6px; font-size: 9px; background: #fafafa; }
+  .total td { font-weight: bold; border-bottom: none; }
+  .wf-foot { padding: 4px 12px; background: #444; color: #ddd; font-size: 8.5px; }
+  .n { position: absolute; width: 16px; height: 16px; border-radius: 50%; background: #c0392b; color: #fff; font-size: 9px; font-weight: bold; display: grid; place-items: center; z-index: 2; }
+  .notes { font-size: 10px; display: flex; flex-direction: column; gap: 6px; }
+  .notes h3 { margin: 0; font-size: 12px; }
+  .note { display: grid; grid-template-columns: 18px 1fr; gap: 6px; align-items: start; line-height: 1.3; }
+  .note .n { position: static; }
+  .fgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px 14px; }
+  .fgrid.two { grid-template-columns: repeat(2, 1fr); }
+  .field { position: relative; display: flex; flex-direction: column; gap: 2px; font-size: 9.5px; }
+  .field label { font-weight: bold; }
+  .field .ctl { display: block; padding: 3px 6px; }
+  .hint { font-size: 8.5px; color: #666; }
+  .btn.inline { display: inline-block; padding: 1px 6px; margin-left: 4px; }
+  .box.state { border-style: dashed; }
+  .box.faded { opacity: .45; font-size: 9.5px; }
+  .btnrow { display: flex; align-items: center; gap: 12px; }
+  .btnrow .btn { padding: 4px 14px; }
+  .legend { margin-top: auto; border: 1px solid #ccc; border-radius: 4px; padding: 6px; font-size: 9px; color: #444; line-height: 1.35; }
+
+  /* ---------- UML (activity + sequence) ---------- */
+  .act { fill: #fff; stroke: #1f2a24; stroke-width: 1.3; }
+  .act.sys { fill: #e9f1ec; }
+  .dec { fill: #fff8e1; stroke: #1f2a24; stroke-width: 1.3; }
+  .flow { fill: none; stroke: #1f2a24; stroke-width: 1.2; marker-end: url(#arrow); }
+  .t { font-size: 10.5px; text-anchor: middle; fill: #1f2a24; }
+  .g { font-size: 9.5px; fill: #8a3b12; font-style: italic; }
+  .q { font-size: 9.5px; fill: #444; }
+  .lane { fill: none; stroke: #8b958f; stroke-width: 1; }
+  .lanehead { fill: #eef0ee; stroke: #8b958f; }
+  .lanelbl { font-size: 11px; font-weight: bold; text-anchor: middle; fill: #1f2a24; }
+  .life { stroke: #8b958f; stroke-dasharray: 5 4; }
+  .actv { fill: #e9f1ec; stroke: #1f2a24; stroke-width: 1; }
+  .msg { stroke: #1f2a24; stroke-width: 1.2; fill: none; marker-end: url(#filled); }
+  .ret { stroke: #1f2a24; stroke-width: 1.1; fill: none; stroke-dasharray: 5 3; marker-end: url(#arrow); }
+  .m { font-size: 10px; fill: #1f2a24; }
+  .mono { font-family: 'Courier New', monospace; font-size: 9.5px; }
+  .head { fill: #fff; stroke: #1f2a24; stroke-width: 1.3; }
+  .frame { fill: none; stroke: #1f2a24; stroke-width: 1.1; }
+  .frametag { fill: #fff; stroke: #1f2a24; stroke-width: 1.1; }
+  .sep { stroke: #1f2a24; stroke-dasharray: 6 4; }
+  .notebox { fill: #fffbe6; stroke: #b9a646; }
+</style>
+</head>
+<body>
+
+<!-- ======================= PAGE 1 — WIREFRAME ======================= -->
+<section class="page">
+  <div class="top"><span>Waste &amp; Recycling Management · Member diagrams</span><span>Jules Venot · 1 / 3</span></div>
+  <h1>Wireframe — New collection form (manager view)</h1>
+  <p class="sub">Screen used during use case <b>UC-A “Plan a collection”</b> · route <code>/collections/new</code> · tables <code>collection</code>, <code>collection_point</code>, <code>treatment_center</code>, <code>app_user</code></p>
+
+  <div class="body">
+    <div class="wf-wrap">
+      <div class="browser">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">http://localhost:8080/collections/new</span></div>
+        <div class="wf-nav" style="position:relative">
+          <span class="logo">♻ Waste &amp; Recycling</span>
+          <span class="l">Waste types</span><span class="l">Collection points</span><span class="l on">Collections</span><span class="l">Treatment centers</span>
+          <span class="sp"></span><span class="l">Logout</span>
+          <span class="n" style="right:-6px;top:3px">1</span>
+        </div>
+        <div class="hdr">
+          <b>New collection</b>
+          <span>Plan a new collection round.</span>
+        </div>
+
+        <div class="content">
+          <span class="back">← Back</span>
+
+          <div class="box">
+            <h4>Collection round</h4>
+            <div class="fgrid">
+              <div class="field">
+                <span class="n" style="left:-16px;top:-6px">2</span>
+                <label>Date</label>
+                <span class="ctl">10 / 11 / 2026 &nbsp;▦</span>
+                <span class="hint">Today or later</span>
+              </div>
+              <div class="field">
+                <label>Status</label>
+                <span><span class="pill">Planned</span></span>
+                <span class="hint">Fixed for a new collection</span>
+              </div>
+              <div class="field">
+                <label>Vehicle plate</label>
+                <span class="ctl">YZ-901-AB</span>
+              </div>
+              <div class="field">
+                <span class="n" style="left:-16px;top:-6px">3</span>
+                <label>Collection point</label>
+                <span class="ctl">Grand Place Tri Collectif (Lille) ▾</span>
+              </div>
+              <div class="field">
+                <label>Treatment center</label>
+                <span class="ctl">Lille Flandres Tri Moderne ▾</span>
+                <span class="hint">Pre-selected from the point</span>
+              </div>
+              <div class="field">
+                <span class="n" style="right:-16px;top:-6px">4</span>
+                <label>Driver</label>
+                <span class="ctl">Thomas Leroux ▾</span>
+              </div>
+            </div>
+
+            <div class="err" style="position:relative;margin-top:8px">
+              <span class="n" style="left:-8px;top:-8px">6</span>
+              ⚠ Thomas Leroux already has a collection on Tue 10 Nov 2026 (Kleber Green Spot).
+              <span class="btn inline">Confirm anyway</span> <span class="btn inline">Choose another driver</span>
+            </div>
+          </div>
+
+          <div class="box state">
+            <span class="n" style="left:-8px;top:-8px">5</span>
+            <h4>Other state — point without a treatment center (flow 4a)</h4>
+            <div class="fgrid two">
+              <div class="field">
+                <label>Collection point</label>
+                <span class="ctl">Commerce Drop-off Zone (Nantes) ▾</span>
+              </div>
+              <div class="field">
+                <label>Treatment center</label>
+                <span class="ctl">Choose an active center… ▾</span>
+              </div>
+            </div>
+            <div class="err" style="margin-top:6px">⚠ This point has no treatment center (its center was deleted). Choose an active center.</div>
+          </div>
+
+          <div class="box faded">
+            <h4>Waste collected</h4>
+            <span>Filled in by the driver during the round (UC-B) — empty for a new collection.</span>
+          </div>
+
+          <div class="btnrow">
+            <span class="btn primary">✓ Submit</span>
+            <span class="back">Cancel</span>
+          </div>
+        </div>
+        <div class="wf-foot">Waste &amp; Recycling Management — Jules Venot, Amadeo Berthelot, Hadi Daccache</div>
+      </div>
+
+      <aside class="notes">
+        <h3>Annotations</h3>
+        <div class="note"><span class="n">1</span><span>Shared navbar; the current section (<i>Collections</i>) is highlighted. The “New collection” button on top of the list opens this blank form.</span></div>
+        <div class="note"><span class="n">2</span><span>Date picker: the date must be today or later, otherwise the form is refused (flow 5a). The status is fixed to <i>planned</i> for a new collection (ENUM default).</span></div>
+        <div class="note"><span class="n">3</span><span>Drop-down filled from <code>collection_point</code> (name + city). Choosing a point pre-selects its center from <code>collection_point.center_id</code> (step 4). Only active centers (<code>is_active</code>) are listed.</span></div>
+        <div class="note"><span class="n">4</span><span>Driver chosen among the users with role <code>driver</code> in <code>app_user</code>; stored with the plate in <code>collection.driver_name</code> and <code>vehicle_plate</code>.</span></div>
+        <div class="note"><span class="n">5</span><span>Flow 4a: the point has no center (FK <code>ON DELETE SET NULL</code>) → inline error, the manager picks an active center manually.</span></div>
+        <div class="note"><span class="n">6</span><span>Flow 5b: the driver already has a collection that day → warning, not a blocking error. Submit sends <code>POST /api/collections</code>; Cancel goes back without saving.</span></div>
+        <div class="legend">
+          <b>Legend</b><br>
+          Dark button = main action · dashed border = exceptional action / message · ▾ = drop-down · ▦ = date picker · faded box = not used in this screen · hatched area = header picture.
+        </div>
+      </aside>
+    </div>
+  </div>
+  <div class="foot"><span>Low-fidelity wireframe — layout and behaviour, not final colours.</span><span>ESSCA × EFREI Budapest — Fall 2026</span></div>
+</section>
+
+<!-- ======================= PAGE 2 — ACTIVITY (Mermaid) ======================= -->
+<section class="page portrait">
+  <div class="top"><span>Waste &amp; Recycling Management · Member diagrams</span><span>Jules Venot · 2 / 3</span></div>
+  <h1>Activity diagram — Plan a collection</h1>
+  <p class="sub">Use case <b>UC-A</b> · actor: manager (role <code>manager</code> in <code>app_user</code>) · alternative flows 4a, 5a and 5b</p>
+  <div class="body mm"><pre class="mermaid">---
+config:
+  theme: base
+  themeVariables:
+    fontFamily: Helvetica, Arial, sans-serif
+    fontSize: 14px
+    lineColor: &quot;#3d4a42&quot;
+    primaryTextColor: &quot;#1f2a24&quot;
+    edgeLabelBackground: &quot;#ffffff&quot;
+  flowchart:
+    curve: basis
+    nodeSpacing: 34
+    rankSpacing: 34
+---
+flowchart TD
+  start(( )):::startN --&gt; A1[Open the Collections page&lt;br/&gt;and click “New collection”]:::manager
+  A1 --&gt; S1[Show the blank form&lt;br/&gt;points + active centers]:::system
+  S1 --&gt; A2[Select a&lt;br/&gt;collection point]:::manager
+  A2 --&gt; D1{Point linked&lt;br/&gt;to a center?}:::decision
+
+  D1 -- yes --&gt; S2[Pre-select the center&lt;br/&gt;from collection_point.center_id]:::system
+  D1 -- &quot;no (4a)&quot; --&gt; S3[Show inline message&lt;br/&gt;“no treatment center”]:::system
+  S3 --&gt; A3[Pick an active&lt;br/&gt;center manually]:::manager
+
+  S2 --&gt; A4[Choose date, driver&lt;br/&gt;and vehicle plate]:::manager
+  A3 --&gt; A4
+  A4 --&gt; A5[Click “Submit”]:::manager
+  A5 --&gt; D2{Date in&lt;br/&gt;the past?}:::decision
+  D2 -- &quot;yes (5a)&quot; --&gt; S4[Refuse: ask for&lt;br/&gt;a valid date]:::system
+  S4 --&gt; A4
+
+  D2 -- no --&gt; D3{Driver already&lt;br/&gt;booked that day?}:::decision
+  D3 -- &quot;yes (5b)&quot; --&gt; S5[Show warning&lt;br/&gt;“driver already booked”]:::system
+  S5 --&gt; D4{Manager&lt;br/&gt;confirms?}:::decision
+  D4 -- &quot;no, other driver&quot; --&gt; A4
+  D4 -- yes --&gt; S6
+  D3 -- no --&gt; S6[Insert row in collection&lt;br/&gt;with status planned]:::system
+  S6 --&gt; S7[Show the collection&lt;br/&gt;in the list and in&lt;br/&gt;the drivers&#x27; rounds]:::system
+  S7 --&gt; stop((( ))):::endN
+
+  classDef manager fill:#ffffff,stroke:#1f2a24,stroke-width:1.5px,color:#1f2a24,rx:10,ry:10
+  classDef system fill:#e3efe7,stroke:#2e5a40,stroke-width:1.5px,color:#1f2a24
+  classDef decision fill:#fff4d6,stroke:#9a7b1c,stroke-width:1.5px,color:#1f2a24
+  classDef startN fill:#1f2a24,stroke:#1f2a24
+  classDef endN fill:#1f2a24,stroke:#1f2a24
+</pre></div>
+  <div class="legend-row"><span><i class="sw d"></i>manager action</span><span><i class="sw s"></i>system action (Vue + server)</span><span><i class="sw q"></i>decision</span><span>● start &nbsp; ◉ end &nbsp;·&nbsp; numbers = UC-A alternative flows</span></div>
+  <div class="foot"><span>Source: docs/diagrams/src/jules_activity.mmd (Mermaid, editable on mermaid.live)</span><span>ESSCA × EFREI Budapest — Fall 2026</span></div>
+</section>
+
+<!-- ======================= PAGE 3 — SEQUENCE (Mermaid) ======================= -->
+<section class="page">
+  <div class="top"><span>Waste &amp; Recycling Management · Member diagrams</span><span>Jules Venot · 3 / 3</span></div>
+  <h1>Sequence diagram — Save a new collection</h1>
+  <p class="sub">UC-A steps 6–7 · planned server flow (Express MVC pipeline + repository) · <code>POST /api/collections</code> → <code>INSERT INTO collection</code></p>
+  <div class="body mm"><pre class="mermaid">---
+config:
+  theme: base
+  themeVariables:
+    fontFamily: Helvetica, Arial, sans-serif
+    fontSize: 14px
+    actorBkg: &quot;#e3efe7&quot;
+    actorBorder: &quot;#2e5a40&quot;
+    actorTextColor: &quot;#1f2a24&quot;
+    actorLineColor: &quot;#8b958f&quot;
+    signalColor: &quot;#1f2a24&quot;
+    signalTextColor: &quot;#1f2a24&quot;
+    activationBkgColor: &quot;#d6e8dc&quot;
+    activationBorderColor: &quot;#2e5a40&quot;
+    labelBoxBkgColor: &quot;#fff4d6&quot;
+    labelBoxBorderColor: &quot;#9a7b1c&quot;
+    labelTextColor: &quot;#1f2a24&quot;
+    loopTextColor: &quot;#1f2a24&quot;
+    noteBkgColor: &quot;#fffbe6&quot;
+    noteBorderColor: &quot;#b9a646&quot;
+  sequence:
+    mirrorActors: false
+    messageMargin: 26
+---
+sequenceDiagram
+  autonumber
+  actor M as Manager
+  participant V as CollectionFormView&lt;br/&gt;(Vue page)
+  participant R as Express router
+  participant C as Collection&lt;br/&gt;Controller
+  participant Repo as Collection&lt;br/&gt;Repository
+  participant DB as MySQL&lt;br/&gt;(recycling)
+
+  M-&gt;&gt;+V: fill date, point, center, driver,&lt;br/&gt;plate and click &quot;Submit&quot;
+  V-&gt;&gt;V: validate() – fields filled, date ≥ today
+  V-&gt;&gt;+R: fetch POST /api/collections&lt;br/&gt;(point_id, center_id, collection_date,&lt;br/&gt;driver_name, vehicle_plate)
+  R-&gt;&gt;+C: createCollection(req, res)
+  deactivate R
+  C-&gt;&gt;+Repo: await isDriverBooked(driver, date)
+  Repo-&gt;&gt;+DB: SELECT COUNT(*) FROM collection&lt;br/&gt;WHERE driver_name = ? AND collection_date = ?
+  DB--&gt;&gt;-Repo: count
+  Repo--&gt;&gt;-C: true / false
+
+  alt driver free that day
+    C-&gt;&gt;+Repo: await insertCollection(data)
+    Repo-&gt;&gt;+DB: INSERT INTO collection&lt;br/&gt;VALUES (?, ?, ?, ?, ?, &#x27;planned&#x27;)
+    DB--&gt;&gt;-Repo: insertId = 11
+    Repo--&gt;&gt;-C: 11
+    C--&gt;&gt;V: 201 Created + new collection (JSON)
+    V--&gt;&gt;M: datasheet of the new collection&lt;br/&gt;with status &quot;Planned&quot;
+  else driver already booked that day – flow 5b
+    C--&gt;&gt;V: 409 Conflict &quot;driver already&lt;br/&gt;booked that day&quot;
+    V--&gt;&gt;M: inline warning: confirm anyway&lt;br/&gt;or choose another driver
+  end
+  deactivate C
+  deactivate V
+
+  Note over C,DB: No UNIQUE key on (driver_name, collection_date):&lt;br/&gt;the controller checks it with a SELECT before the INSERT.&lt;br/&gt;If the manager confirms, Vue sends the POST again with confirm = true.
+</pre></div>
+  <div class="foot"><span>Source: docs/diagrams/src/jules_sequence.mmd (Mermaid, editable on mermaid.live) · solid arrow = call, dashed = return</span><span>ESSCA × EFREI Budapest — Fall 2026</span></div>
+</section>
+
+<style>
+  @page portrait { size: A4 portrait; margin: 0; }
+  .page.portrait { page: portrait; width: 210mm; height: 297mm; }
+  .page:last-of-type { page-break-after: auto; }
+  .mm pre { font-family: Helvetica, Arial, sans-serif; }
+  .mm { display: flex; align-items: center; justify-content: center; }
+  .mm pre { margin: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+  .mm svg { max-width: 100% !important; max-height: 100%; width: auto; height: auto; }
+  .legend-row { display: flex; gap: 18px; font-size: 9.5px; color: #444; padding: 4px 0; }
+  .sw { display: inline-block; width: 16px; height: 10px; border-radius: 3px; vertical-align: -1px; margin-right: 5px; border: 1.3px solid #1f2a24; }
+  .sw.d { background: #fff; } .sw.s { background: #e3efe7; border-color: #2e5a40; } .sw.q { background: #fff4d6; border-color: #9a7b1c; }
+</style>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: false });
+  await mermaid.run();
+  window.__mermaidDone = true;
+</script>
+</body>
+</html>
