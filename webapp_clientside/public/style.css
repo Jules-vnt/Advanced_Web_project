@@ -55,6 +55,97 @@ h1, h2, h3 {
   color: var(--ink);
 }
 
+/* Toolbar on top of a list page: count, filter and New button */
+.list-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+/* Show / Edit / Delete buttons */
+.item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.item-actions .btn {
+  --bs-btn-padding-y: 0.15rem;
+  --bs-btn-padding-x: 0.6rem;
+  --bs-btn-font-size: 0.8rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.back-link {
+  display: inline-flex;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Datasheet of a single entity */
+.sheet {
+  max-width: 780px;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.sheet-facts {
+  display: grid;
+  grid-template-columns: minmax(150px, auto) 1fr;
+  gap: 0.6rem 1.5rem;
+  margin: 0 0 1.25rem;
+}
+
+.sheet-facts dt {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.sheet-facts dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.sheet-section {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.sheet-section h2 {
+  font-size: 1.15rem;
+}
+
+/* Edit form, same look for every entity */
+.entity-form {
+  max-width: 780px;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.entity-form .form-label {
+  font-weight: 600;
+}
+
+.entity-form-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
 :focus-visible {
   outline: 3px solid var(--moss);
   outline-offset: 2px;

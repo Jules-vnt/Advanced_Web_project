@@ -8,10 +8,15 @@
     />
 
     <div class="container pb-5">
-      <p class="text-muted">
-        {{ centers.length }} treatment centers,
-        {{ totalCapacity.toLocaleString('en-GB') }} tons of capacity in total.
-      </p>
+      <div class="list-toolbar">
+        <p class="text-muted mb-0">
+          {{ centers.length }} treatment centers,
+          {{ totalCapacity.toLocaleString('en-GB') }} tons of capacity in total.
+        </p>
+        <router-link to="/treatment-centers/new" class="btn-brand">
+          <i class="bi bi-plus-lg" aria-hidden="true"></i> New treatment center
+        </router-link>
+      </div>
 
       <ul class="centers">
         <li v-for="c in centers" :key="c.center_id" class="center">
@@ -46,6 +51,13 @@
             <dt>Collections</dt>
             <dd>{{ collectionCount(c.center_id) }}</dd>
           </dl>
+
+          <ItemActions
+            base="/treatment-centers"
+            :id="c.center_id"
+            :name="c.name"
+            class="center-actions"
+          />
         </li>
       </ul>
     </div>
@@ -55,6 +67,7 @@
 <script>
 import sections from '@/sections'
 import PageHeader from '@/components/PageHeader.vue'
+import ItemActions from '@/components/ItemActions.vue'
 // Fake JSON data: same field names as the treatment_center, collection_point
 // and collection tables
 import centersData from '../../../data/treatment_centers.json'
@@ -63,7 +76,7 @@ import collectionsData from '../../../data/collections.json'
 
 export default {
   name: 'TreatmentCentersView',
-  components: { PageHeader },
+  components: { PageHeader, ItemActions },
   data() {
     return {
       section: sections.find((s) => s.name === 'treatment-centers'),
@@ -195,6 +208,10 @@ export default {
   padding-top: 0.75rem;
   border-top: 1px solid var(--line);
   font-size: 0.9rem;
+}
+
+.center-actions {
+  margin-top: 1rem;
 }
 
 .center-facts dt {
