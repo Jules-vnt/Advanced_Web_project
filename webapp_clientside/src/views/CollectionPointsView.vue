@@ -8,20 +8,26 @@
     />
 
     <div class="container pb-5">
-      <div class="toolbar">
+      <div class="list-toolbar">
         <p class="text-muted mb-0">
           {{ filteredPoints.length }} of {{ points.length }} collection points
         </p>
 
-        <label class="toolbar-filter">
-          <span class="text-muted">Type</span>
-          <select v-model="typeFilter" class="form-select form-select-sm">
-            <option value="">All types</option>
-            <option v-for="(t, type) in types" :key="type" :value="type">
-              {{ t.label }}
-            </option>
-          </select>
-        </label>
+        <div class="toolbar-right">
+          <label class="toolbar-filter">
+            <span class="text-muted">Type</span>
+            <select v-model="typeFilter" class="form-select form-select-sm">
+              <option value="">All types</option>
+              <option v-for="(t, type) in types" :key="type" :value="type">
+                {{ t.label }}
+              </option>
+            </select>
+          </label>
+
+          <router-link to="/collection-points/new" class="btn-brand">
+            <i class="bi bi-plus-lg" aria-hidden="true"></i> New collection point
+          </router-link>
+        </div>
       </div>
 
       <div class="table-card">
@@ -34,6 +40,7 @@
               <th scope="col">Address</th>
               <th scope="col">Treatment center</th>
               <th scope="col">Map</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -62,6 +69,9 @@
                   {{ p.latitude.toFixed(3) }}, {{ p.longitude.toFixed(3) }}
                 </a>
               </td>
+              <td>
+                <ItemActions base="/collection-points" :id="p.point_id" :name="p.name" />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -73,26 +83,22 @@
 <script>
 import sections from '@/sections'
 import PageHeader from '@/components/PageHeader.vue'
+import ItemActions from '@/components/ItemActions.vue'
+import pointTypes from '@/enums/pointTypes'
 // Fake JSON data: same field names as the collection_point and treatment_center tables
 import pointsData from '../../../data/collection_points.json'
 import centersData from '../../../data/treatment_centers.json'
 
 export default {
   name: 'CollectionPointsView',
-  components: { PageHeader },
+  components: { PageHeader, ItemActions },
   data() {
     return {
       section: sections.find((s) => s.name === 'collection-points'),
       points: [],
       centers: [],
       typeFilter: '',
-      // Values of the point_type ENUM
-      types: {
-        street_bin: { label: 'Street bin', icon: 'bi-trash3' },
-        drop_off_center: { label: 'Drop-off center', icon: 'bi-truck' },
-        container: { label: 'Container', icon: 'bi-box' },
-        business: { label: 'Business', icon: 'bi-shop' }
-      }
+      types: pointTypes
     }
   },
   computed: {
@@ -122,13 +128,11 @@ export default {
 </script>
 
 <style scoped>
-.toolbar {
+.toolbar-right {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: 1rem;
 }
 
 .toolbar-filter {
