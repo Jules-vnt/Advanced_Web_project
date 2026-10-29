@@ -1,0 +1,50 @@
+---
+title: Activity – Add or edit a collection point (manager)
+config:
+  theme: base
+  themeVariables:
+    fontFamily: Helvetica, Arial, sans-serif
+    fontSize: 14px
+    lineColor: "#3d4a42"
+    primaryTextColor: "#1f2a24"
+    edgeLabelBackground: "#ffffff"
+  flowchart:
+    curve: basis
+    nodeSpacing: 34
+    rankSpacing: 34
+---
+flowchart TD
+  start(( )):::startN --> A1[Open the<br/>Collection points page]:::manager
+  A1 --> S1[List points<br/>+ treatment centers]:::system
+  S1 --> D1{Which<br/>action?}:::decision
+
+  D1 -- New --> S2[Show empty form<br/>type = street_bin]:::system
+  D1 -- Edit --> S3[Load the point<br/>into the form]:::system
+  D1 -- Delete --> A6[Click “Delete”<br/>on a row]:::manager
+
+  S2 --> A2[Fill in name, type, address,<br/>city, lat / lon, center]:::manager
+  S3 --> A2
+  A2 --> A3[Click “Save”]:::manager
+  A3 --> D2{Required fields<br/>filled?}:::decision
+  D2 -- "no (name, type, city)" --> S4[Show inline error<br/>under the field]:::system
+  D2 -- yes --> D3{Coordinates valid?<br/>lat ±90 · lon ±180}:::decision
+  D3 -- no --> S4
+  D3 -- yes --> D4{Chosen center<br/>is_active?}:::decision
+  D4 -- no --> S4
+  D4 -- yes --> S5[POST or PUT<br/>INSERT / UPDATE<br/>collection_point#nbsp;#nbsp;#nbsp;]:::system
+  S4 --> A2
+
+  A6 --> S6[Ask confirmation<br/>“linked collections<br/>will be deleted too”]:::system
+  S6 --> D5{Confirmed?}:::decision
+  D5 -- no --> S1
+  D5 -- yes --> S7[DELETE collection_point#nbsp;#nbsp;#nbsp;<br/>→ collections removed<br/>ON DELETE CASCADE]:::system
+
+  S5 --> S8[Back to the list<br/>+ success message#nbsp;#nbsp;#nbsp;]:::system
+  S7 --> S8
+  S8 --> stop((( ))):::endN
+
+  classDef manager fill:#ffffff,stroke:#1f2a24,stroke-width:1.5px,color:#1f2a24,rx:10,ry:10
+  classDef system fill:#e3efe7,stroke:#2e5a40,stroke-width:1.5px,color:#1f2a24
+  classDef decision fill:#fff4d6,stroke:#9a7b1c,stroke-width:1.5px,color:#1f2a24
+  classDef startN fill:#1f2a24,stroke:#1f2a24
+  classDef endN fill:#1f2a24,stroke:#1f2a24
