@@ -1,0 +1,59 @@
+---
+title: Sequence – Save a new collection (UC-A steps 6–7)
+config:
+  theme: base
+  themeVariables:
+    fontFamily: Helvetica, Arial, sans-serif
+    fontSize: 14px
+    actorBkg: "#e3efe7"
+    actorBorder: "#2e5a40"
+    actorTextColor: "#1f2a24"
+    actorLineColor: "#8b958f"
+    signalColor: "#1f2a24"
+    signalTextColor: "#1f2a24"
+    activationBkgColor: "#d6e8dc"
+    activationBorderColor: "#2e5a40"
+    labelBoxBkgColor: "#fff4d6"
+    labelBoxBorderColor: "#9a7b1c"
+    labelTextColor: "#1f2a24"
+    loopTextColor: "#1f2a24"
+    noteBkgColor: "#fffbe6"
+    noteBorderColor: "#b9a646"
+  sequence:
+    mirrorActors: false
+    messageMargin: 26
+---
+sequenceDiagram
+  autonumber
+  actor M as Manager
+  participant V as CollectionFormView<br/>(Vue page)
+  participant R as Express router
+  participant C as Collection<br/>Controller
+  participant Repo as Collection<br/>Repository
+  participant DB as MySQL<br/>(recycling)
+
+  M->>+V: fill date, point, center, driver,<br/>plate and click "Submit"
+  V->>V: validate() – fields filled, date ≥ today
+  V->>+R: fetch POST /api/collections<br/>(point_id, center_id, collection_date,<br/>driver_name, vehicle_plate)
+  R->>+C: createCollection(req, res)
+  deactivate R
+  C->>+Repo: await isDriverBooked(driver, date)
+  Repo->>+DB: SELECT COUNT(*) FROM collection<br/>WHERE driver_name = ? AND collection_date = ?
+  DB-->>-Repo: count
+  Repo-->>-C: true / false
+
+  alt driver free that day
+    C->>+Repo: await insertCollection(data)
+    Repo->>+DB: INSERT INTO collection<br/>VALUES (?, ?, ?, ?, ?, 'planned')
+    DB-->>-Repo: insertId = 11
+    Repo-->>-C: 11
+    C-->>V: 201 Created + new collection (JSON)
+    V-->>M: datasheet of the new collection<br/>with status "Planned"
+  else driver already booked that day – flow 5b
+    C-->>V: 409 Conflict "driver already<br/>booked that day"
+    V-->>M: inline warning: confirm anyway<br/>or choose another driver
+  end
+  deactivate C
+  deactivate V
+
+  Note over C,DB: No UNIQUE key on (driver_name, collection_date):<br/>the controller checks it with a SELECT before the INSERT.<br/>If the manager confirms, Vue sends the POST again with confirm = true.
