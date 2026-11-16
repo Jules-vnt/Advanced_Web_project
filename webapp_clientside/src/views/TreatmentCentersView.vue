@@ -9,16 +9,32 @@
 
     <div class="container pb-5">
       <div class="list-toolbar">
-        <p class="text-muted mb-0">
+        <p v-if="!loading && !error" class="text-muted mb-0">
           {{ centers.length }} treatment centers,
           {{ totalCapacity.toLocaleString('en-GB') }} tons of capacity in total.
         </p>
+        <p v-else class="mb-0"></p>
         <router-link to="/treatment-centers/new" class="btn-brand">
           <i class="bi bi-plus-lg" aria-hidden="true"></i> New treatment center
         </router-link>
       </div>
 
-      <ul class="centers">
+      <!-- Waiting for the server -->
+      <div v-if="loading" class="text-center text-muted py-5">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <p class="mt-2 mb-0">Loading the treatment centers...</p>
+      </div>
+
+      <!-- The server or the database did not answer -->
+      <div v-else-if="error" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+        Could not load the treatment centers: {{ error }}
+        <button type="button" class="btn btn-sm btn-outline-danger ms-2" @click="getAllData">
+          Try again
+        </button>
+      </div>
+
+      <ul v-else class="centers">
         <li v-for="c in centers" :key="c.center_id" class="center">
           <div class="center-head">
             <span class="center-city">{{ c.city }}</span>
@@ -47,9 +63,9 @@
             <dt>Opened</dt>
             <dd>{{ formatDate(c.opening_date) }}</dd>
             <dt>Collection points</dt>
-            <dd>{{ pointCount(c.center_id) }}</dd>
+            <dd>{{ c.point_count }}</dd>
             <dt>Collections</dt>
-            <dd>{{ collectionCount(c.center_id) }}</dd>
+            <dd>{{ c.collection_count }}</dd>
           </dl>
 
           <ItemActions
@@ -68,11 +84,9 @@
 import sections from '@/sections'
 import PageHeader from '@/components/PageHeader.vue'
 import ItemActions from '@/components/ItemActions.vue'
-// Fake JSON data: same field names as the treatment_center, collection_point
-// and collection tables
-import centersData from '../../../data/treatment_centers.json'
-import pointsData from '../../../data/collection_points.json'
-import collectionsData from '../../../data/collections.json'
+// Data now comes from MySQL through the server (GET /api/treatment-centers).
+// point_count and collection_count are computed by the SQL query.
+import { treatmentCentersApi } from '@/services/api'
 
 export default {
   name: 'TreatmentCentersView',
@@ -81,8 +95,8 @@ export default {
     return {
       section: sections.find((s) => s.name === 'treatment-centers'),
       centers: [],
-      points: [],
-      collections: []
+      loading: true,
+      error: null
     }
   },
   computed: {
@@ -94,22 +108,24 @@ export default {
     }
   },
   methods: {
-    getAllData() {
-      // Later: replaced by fetch() calls to the server
-      this.centers = centersData
-      this.points = pointsData
-      this.collections = collectionsData
+    async getAllData() {
+      this.loading = true
+      this.error = null
+      try {
+        this.centers = await treatmentCentersApi.getAll()
+      } catch (err) {
+        this.error = err.message
+      } finally {
+        this.loading = false
+      }
     },
     capacityPercent(center) {
       return Math.round((center.capacity_tons / this.maxCapacity) * 100)
     },
-    pointCount(id) {
-      return this.points.filter((p) => p.center_id === id).length
-    },
-    collectionCount(id) {
-      return this.collections.filter((c) => c.center_id === id).length
-    },
     formatDate(iso) {
+      if (!iso) {
+        return '-'
+      }
       return new Date(iso).toLocaleDateString('en-GB', {
         month: 'long',
         year: 'numeric',
