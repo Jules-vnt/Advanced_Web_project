@@ -28,6 +28,10 @@ SECTIONS = [
     ('Member diagrams – Amadeo Berthelot (wireframe, activity, sequence)', 'member_amadeo_berthelot.pdf', None),
     ('Member diagrams – Jules Venot (wireframe, activity, sequence)', 'member_jules_venot.pdf', None),
     ('Member diagrams – Hadi Daccache (wireframe, activity, sequence)', 'member_hadi_daccache.pdf', None),
+    ('Component diagram – Amadeo Berthelot', 'component_amadeo_berthelot.pdf', None),
+    ('Component diagram – Jules Venot', 'component_jules_venot.pdf', None),
+    ('Component diagram – Hadi Daccache', 'component_hadi_daccache.pdf', None),
+    ('Class diagram – whole project (controllers, repositories, model)', 'class_diagram_recycling.pdf', None),
 ]
 
 

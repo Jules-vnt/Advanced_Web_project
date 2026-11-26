@@ -12,10 +12,18 @@
         <i class="bi bi-arrow-left" aria-hidden="true"></i> Back
       </router-link>
 
+      <div v-if="loading" class="text-center text-muted py-5">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+      </div>
+
+      <div v-if="error" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> {{ error }}
+      </div>
+
       <EntityForm v-if="form" :cancel-to="backTo" @submit="submitForm">
         <div class="col-md-8">
           <label for="cp-name" class="form-label">Name</label>
-          <input id="cp-name" v-model="form.name" type="text" class="form-control" maxlength="100" />
+          <input id="cp-name" v-model="form.name" type="text" class="form-control" maxlength="100" required />
         </div>
         <div class="col-md-4">
           <label for="cp-type" class="form-label">Type</label>
@@ -27,11 +35,11 @@
         </div>
         <div class="col-md-8">
           <label for="cp-address" class="form-label">Address</label>
-          <input id="cp-address" v-model="form.address" type="text" class="form-control" maxlength="255" />
+          <input id="cp-address" v-model="form.address" type="text" class="form-control" maxlength="150" />
         </div>
         <div class="col-md-4">
           <label for="cp-city" class="form-label">City</label>
-          <input id="cp-city" v-model="form.city" type="text" class="form-control" maxlength="100" />
+          <input id="cp-city" v-model="form.city" type="text" class="form-control" maxlength="80" required />
         </div>
         <div class="col-md-4">
           <label for="cp-lat" class="form-label">Latitude</label>
@@ -44,7 +52,7 @@
         <div class="col-md-4">
           <label for="cp-center" class="form-label">Treatment center</label>
           <select id="cp-center" v-model="form.center_id" class="form-select">
-            <option :value="null" disabled>Choose…</option>
+            <option :value="null">None</option>
             <option v-for="c in centers" :key="c.center_id" :value="c.center_id">
               {{ c.name }}
             </option>
@@ -52,7 +60,7 @@
         </div>
       </EntityForm>
 
-      <p v-else class="text-muted">There is no collection point with the ID {{ $route.params.id }}.</p>
+      <p v-else-if="!loading && !error" class="text-muted">There is no collection point with the ID {{ $route.params.id }}.</p>
     </div>
   </div>
 </template>
@@ -62,9 +70,9 @@ import sections from '@/sections'
 import PageHeader from '@/components/PageHeader.vue'
 import EntityForm from '@/components/EntityForm.vue'
 import pointTypes from '@/enums/pointTypes'
-// Fake JSON data: same field names as the collection_point and treatment_center tables
-import pointsData from '../../../data/collection_points.json'
-import centersData from '../../../data/treatment_centers.json'
+// New: POST /api/collection-points - Edit: GET then PUT /api/collection-points/:id
+// The center list comes from GET /api/treatment-centers
+import { collectionPointsApi, treatmentCentersApi } from '@/services/api'
 
 export default {
   name: 'CollectionPointFormView',
@@ -74,7 +82,9 @@ export default {
       section: sections.find((s) => s.name === 'collection-points'),
       types: pointTypes,
       centers: [],
-      form: null
+      form: null,
+      loading: false,
+      error: null
     }
   },
   computed: {
@@ -86,29 +96,60 @@ export default {
     }
   },
   methods: {
-    getData() {
-      // Later: replaced by fetch() calls to the server
-      this.centers = centersData
+    async getData() {
+      this.loading = true
+      try {
+        this.centers = await treatmentCentersApi.getAll()
 
-      if (this.isNew) {
-        this.form = {
-          name: '',
-          point_type: 'street_bin',
-          address: '',
-          city: '',
-          latitude: null,
-          longitude: null,
-          center_id: null
+        if (this.isNew) {
+          this.form = {
+            name: '',
+            point_type: 'street_bin',
+            address: '',
+            city: '',
+            latitude: null,
+            longitude: null,
+            center_id: null
+          }
+          return
         }
-        return
+        const point = await collectionPointsApi.getById(this.$route.params.id)
+        // Only the editable columns (not center_name)
+        this.form = {
+          name: point.name,
+          point_type: point.point_type,
+          address: point.address,
+          city: point.city,
+          latitude: point.latitude,
+          longitude: point.longitude,
+          center_id: point.center_id
+        }
+      } catch (err) {
+        if (err.status !== 404) {
+          this.error = err.message
+        }
+        this.form = null
+      } finally {
+        this.loading = false
       }
-      const id = Number(this.$route.params.id)
-      const point = pointsData.find((p) => p.point_id === id)
-      // Copy, so the form never changes the loaded data
-      this.form = point ? { ...point } : null
     },
-    submitForm() {
-      // Later: POST (new) or PUT (edit) request to the server. For now nothing happens.
+    async submitForm() {
+      this.error = null
+      // An emptied number input gives '' : send null instead
+      const item = {
+        ...this.form,
+        latitude: this.form.latitude === '' ? null : this.form.latitude,
+        longitude: this.form.longitude === '' ? null : this.form.longitude
+      }
+      try {
+        const saved = this.isNew
+          ? await collectionPointsApi.create(item)
+          : await collectionPointsApi.update(this.$route.params.id, item)
+        this.$router.push(`/collection-points/${saved.point_id}`)
+      } catch (err) {
+        // e.g. 400 "The latitude must be between -90 and 90"
+        this.error = err.message
+      }
     }
   },
   created() {

@@ -12,18 +12,26 @@
         <i class="bi bi-arrow-left" aria-hidden="true"></i> Back
       </router-link>
 
+      <div v-if="loading" class="text-center text-muted py-5">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+      </div>
+
+      <div v-if="error" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> {{ error }}
+      </div>
+
       <EntityForm v-if="form" :cancel-to="backTo" @submit="submitForm">
         <div class="col-md-8">
           <label for="tc-name" class="form-label">Name</label>
-          <input id="tc-name" v-model="form.name" type="text" class="form-control" maxlength="100" />
+          <input id="tc-name" v-model="form.name" type="text" class="form-control" maxlength="100" required />
         </div>
         <div class="col-md-4">
           <label for="tc-city" class="form-label">City</label>
-          <input id="tc-city" v-model="form.city" type="text" class="form-control" maxlength="100" />
+          <input id="tc-city" v-model="form.city" type="text" class="form-control" maxlength="100" required />
         </div>
         <div class="col-12">
           <label for="tc-address" class="form-label">Address</label>
-          <input id="tc-address" v-model="form.address" type="text" class="form-control" maxlength="255" />
+          <input id="tc-address" v-model="form.address" type="text" class="form-control" maxlength="150" />
         </div>
         <div class="col-md-4">
           <label for="tc-capacity" class="form-label">Capacity (tons)</label>
@@ -41,7 +49,7 @@
         </div>
       </EntityForm>
 
-      <p v-else class="text-muted">There is no treatment center with the ID {{ $route.params.id }}.</p>
+      <p v-else-if="!loading && !error" class="text-muted">There is no treatment center with the ID {{ $route.params.id }}.</p>
     </div>
   </div>
 </template>
@@ -50,8 +58,8 @@
 import sections from '@/sections'
 import PageHeader from '@/components/PageHeader.vue'
 import EntityForm from '@/components/EntityForm.vue'
-// Fake JSON data: same field names as the treatment_center table
-import centersData from '../../../data/treatment_centers.json'
+// New: POST /api/treatment-centers - Edit: GET then PUT /api/treatment-centers/:id
+import { treatmentCentersApi } from '@/services/api'
 
 export default {
   name: 'TreatmentCenterFormView',
@@ -59,7 +67,9 @@ export default {
   data() {
     return {
       section: sections.find((s) => s.name === 'treatment-centers'),
-      form: null
+      form: null,
+      loading: false,
+      error: null
     }
   },
   computed: {
@@ -71,7 +81,7 @@ export default {
     }
   },
   methods: {
-    getData() {
+    async getData() {
       if (this.isNew) {
         this.form = {
           name: '',
@@ -83,14 +93,38 @@ export default {
         }
         return
       }
-      // Later: replaced by a fetch() call to the server
-      const id = Number(this.$route.params.id)
-      const center = centersData.find((c) => c.center_id === id)
-      // Copy, so the form never changes the loaded data
-      this.form = center ? { ...center } : null
+      this.loading = true
+      try {
+        const center = await treatmentCentersApi.getById(this.$route.params.id)
+        // Only the editable columns (not the counts)
+        this.form = {
+          name: center.name,
+          city: center.city,
+          address: center.address,
+          capacity_tons: center.capacity_tons,
+          opening_date: center.opening_date,
+          is_active: !!center.is_active
+        }
+      } catch (err) {
+        if (err.status !== 404) {
+          this.error = err.message
+        }
+        this.form = null
+      } finally {
+        this.loading = false
+      }
     },
-    submitForm() {
-      // Later: POST (new) or PUT (edit) request to the server. For now nothing happens.
+    async submitForm() {
+      this.error = null
+      try {
+        const saved = this.isNew
+          ? await treatmentCentersApi.create(this.form)
+          : await treatmentCentersApi.update(this.$route.params.id, this.form)
+        this.$router.push(`/treatment-centers/${saved.center_id}`)
+      } catch (err) {
+        // e.g. 400 "The name is required"
+        this.error = err.message
+      }
     }
   },
   created() {
