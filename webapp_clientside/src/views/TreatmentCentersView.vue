@@ -73,6 +73,7 @@
             :id="c.center_id"
             :name="c.name"
             class="center-actions"
+            @deleted="getAllData"
           />
         </li>
       </ul>
@@ -104,7 +105,7 @@ export default {
       return this.centers.reduce((sum, c) => sum + c.capacity_tons, 0)
     },
     maxCapacity() {
-      return Math.max(...this.centers.map((c) => c.capacity_tons))
+      return Math.max(1, ...this.centers.map((c) => c.capacity_tons))
     }
   },
   methods: {

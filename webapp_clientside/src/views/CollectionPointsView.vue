@@ -10,7 +10,9 @@
     <div class="container pb-5">
       <div class="list-toolbar">
         <p class="text-muted mb-0">
-          {{ filteredPoints.length }} of {{ points.length }} collection points
+          <template v-if="!loading && !error">
+            {{ filteredPoints.length }} of {{ points.length }} collection points
+          </template>
         </p>
 
         <div class="toolbar-right">
@@ -30,7 +32,20 @@
         </div>
       </div>
 
-      <div class="table-card">
+      <div v-if="loading" class="text-center text-muted py-5">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <p class="mt-2 mb-0">Loading the collection points...</p>
+      </div>
+
+      <div v-else-if="error" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+        Could not load the collection points: {{ error }}
+        <button type="button" class="btn btn-sm btn-outline-danger ms-2" @click="getAllData">
+          Try again
+        </button>
+      </div>
+
+      <div v-else class="table-card">
         <table class="table align-middle mb-0">
           <thead>
             <tr>
@@ -57,9 +72,11 @@
                 {{ p.address }}<br />
                 <span class="text-muted small">{{ p.city }}</span>
               </td>
-              <td>{{ centerName(p.center_id) }}</td>
+              <td>{{ p.center_name || '—' }}</td>
               <td>
+                <span v-if="p.latitude == null || p.longitude == null" class="text-muted">—</span>
                 <a
+                  v-else
                   :href="mapUrl(p)"
                   target="_blank"
                   rel="noopener"
@@ -70,7 +87,12 @@
                 </a>
               </td>
               <td>
-                <ItemActions base="/collection-points" :id="p.point_id" :name="p.name" />
+                <ItemActions
+                  base="/collection-points"
+                  :id="p.point_id"
+                  :name="p.name"
+                  @deleted="getAllData"
+                />
               </td>
             </tr>
           </tbody>
@@ -85,9 +107,9 @@ import sections from '@/sections'
 import PageHeader from '@/components/PageHeader.vue'
 import ItemActions from '@/components/ItemActions.vue'
 import pointTypes from '@/enums/pointTypes'
-// Fake JSON data: same field names as the collection_point and treatment_center tables
-import pointsData from '../../../data/collection_points.json'
-import centersData from '../../../data/treatment_centers.json'
+// Data comes from MySQL through the server (GET /api/collection-points).
+// center_name is added by a LEFT JOIN on treatment_center.
+import { collectionPointsApi } from '@/services/api'
 
 export default {
   name: 'CollectionPointsView',
@@ -96,9 +118,10 @@ export default {
     return {
       section: sections.find((s) => s.name === 'collection-points'),
       points: [],
-      centers: [],
       typeFilter: '',
-      types: pointTypes
+      types: pointTypes,
+      loading: true,
+      error: null
     }
   },
   computed: {
@@ -108,14 +131,16 @@ export default {
     }
   },
   methods: {
-    getAllData() {
-      // Later: replaced by a fetch() call to the server
-      this.points = pointsData
-      this.centers = centersData
-    },
-    centerName(id) {
-      const center = this.centers.find((c) => c.center_id === id)
-      return center ? center.name : '—'
+    async getAllData() {
+      this.loading = true
+      this.error = null
+      try {
+        this.points = await collectionPointsApi.getAll()
+      } catch (err) {
+        this.error = err.message
+      } finally {
+        this.loading = false
+      }
     },
     mapUrl(p) {
       return `https://www.openstreetmap.org/?mlat=${p.latitude}&mlon=${p.longitude}#map=17/${p.latitude}/${p.longitude}`

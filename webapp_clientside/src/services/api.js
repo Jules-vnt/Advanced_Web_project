@@ -8,7 +8,17 @@ async function request(path, options = {}) {
     ...options
   })
   if (!response.ok) {
-    throw new Error(`Server error ${response.status} on ${path}`)
+    // The server answers { error: '...' } (e.g. 409 when a delete is refused by a foreign key)
+    let message = `Server error ${response.status} on ${path}`
+    try {
+      const body = await response.json()
+      if (body && body.error) message = body.error
+    } catch (e) {
+      // No JSON body: keep the generic message
+    }
+    const error = new Error(message)
+    error.status = response.status
+    throw error
   }
   // DELETE may answer with no body
   if (response.status === 204) {
@@ -29,9 +39,23 @@ function crud(resource) {
   }
 }
 
-// Only treatmentCentersApi.getAll() and getById() exist on the server for now.
-// The other pages still read the JSON files and will switch to these later.
-export const treatmentCentersApi = crud('treatment-centers')
+export const treatmentCentersApi = {
+  ...crud('treatment-centers'),
+  // Collection points served by one center
+  getPoints: (id) => request(`/api/treatment-centers/${id}/collection-points`)
+}
+export const collectionPointsApi = {
+  ...crud('collection-points'),
+  // Collections done at one point
+  getCollections: (id) => request(`/api/collection-points/${id}/collections`)
+}
 export const wasteTypesApi = crud('waste-types')
-export const collectionPointsApi = crud('collection-points')
 export const collectionsApi = crud('collections')
+
+// Used by ItemActions: list path of a page ('/treatment-centers') -> its API
+export const apiByBase = {
+  '/treatment-centers': treatmentCentersApi,
+  '/collection-points': collectionPointsApi,
+  '/waste-types': wasteTypesApi,
+  '/collections': collectionsApi
+}

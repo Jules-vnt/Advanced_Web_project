@@ -1,7 +1,7 @@
 <template>
   <div>
     <PageHeader
-      :title="point ? point.name : 'Collection point not found'"
+      :title="point ? point.name : loading ? 'Collection point' : 'Collection point not found'"
       description="Datasheet of a collection point."
       :image="section.image"
       :image-alt="section.imageAlt"
@@ -12,7 +12,17 @@
         <i class="bi bi-arrow-left" aria-hidden="true"></i> All collection points
       </router-link>
 
-      <div v-if="point" class="sheet">
+      <div v-if="loading" class="text-center text-muted py-5">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <p class="mt-2 mb-0">Loading the collection point...</p>
+      </div>
+
+      <div v-else-if="error" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+        Could not load the collection point: {{ error }}
+      </div>
+
+      <div v-else-if="point" class="sheet">
         <p class="point-type">
           <i :class="['bi', types[point.point_type].icon]" aria-hidden="true"></i>
           {{ types[point.point_type].label }}
@@ -27,16 +37,18 @@
           <dd>{{ point.address }}, {{ point.city }}</dd>
           <dt>Coordinates</dt>
           <dd>
-            <a :href="mapUrl" target="_blank" rel="noopener">
+            <span v-if="point.latitude == null || point.longitude == null" class="text-muted">—</span>
+            <a v-else :href="mapUrl" target="_blank" rel="noopener">
               <i class="bi bi-geo-alt" aria-hidden="true"></i>
               {{ point.latitude }}, {{ point.longitude }}
             </a>
           </dd>
           <dt>Treatment center</dt>
           <dd>
-            <router-link :to="'/treatment-centers/' + point.center_id">
-              {{ centerName(point.center_id) }}
+            <router-link v-if="point.center_id" :to="'/treatment-centers/' + point.center_id">
+              {{ point.center_name }}
             </router-link>
+            <span v-else class="text-muted">None</span>
           </dd>
         </dl>
 
@@ -72,11 +84,9 @@ import PageHeader from '@/components/PageHeader.vue'
 import ItemActions from '@/components/ItemActions.vue'
 import pointTypes from '@/enums/pointTypes'
 import collectionStatuses from '@/enums/collectionStatuses'
-// Fake JSON data: same field names as the collection_point, treatment_center
-// and collection tables
-import pointsData from '../../../data/collection_points.json'
-import centersData from '../../../data/treatment_centers.json'
-import collectionsData from '../../../data/collections.json'
+// Data comes from MySQL through the server:
+// GET /api/collection-points/:id and GET /api/collection-points/:id/collections
+import { collectionPointsApi } from '@/services/api'
 
 export default {
   name: 'CollectionPointView',
@@ -87,7 +97,9 @@ export default {
       point: null,
       collections: [],
       types: pointTypes,
-      statuses: collectionStatuses
+      statuses: collectionStatuses,
+      loading: true,
+      error: null
     }
   },
   computed: {
@@ -97,15 +109,26 @@ export default {
     }
   },
   methods: {
-    getData() {
-      // Later: replaced by fetch() calls to the server
-      const id = Number(this.$route.params.id)
-      this.point = pointsData.find((p) => p.point_id === id) || null
-      this.collections = collectionsData.filter((c) => c.point_id === id)
-    },
-    centerName(id) {
-      const center = centersData.find((c) => c.center_id === id)
-      return center ? center.name : '—'
+    async getData() {
+      this.loading = true
+      this.error = null
+      const id = this.$route.params.id
+      try {
+        const [point, collections] = await Promise.all([
+          collectionPointsApi.getById(id),
+          collectionPointsApi.getCollections(id)
+        ])
+        this.point = point
+        this.collections = collections
+      } catch (err) {
+        // 404: the "no collection point" message is shown instead of an error
+        if (err.status !== 404) {
+          this.error = err.message
+        }
+        this.point = null
+      } finally {
+        this.loading = false
+      }
     },
     formatDate(iso) {
       return new Date(iso).toLocaleDateString('en-GB', {

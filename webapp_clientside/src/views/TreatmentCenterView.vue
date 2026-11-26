@@ -1,7 +1,7 @@
 <template>
   <div>
     <PageHeader
-      :title="center ? center.name : 'Treatment center not found'"
+      :title="center ? center.name : loading ? 'Treatment center' : 'Treatment center not found'"
       description="Datasheet of a treatment center."
       :image="section.image"
       :image-alt="section.imageAlt"
@@ -12,7 +12,17 @@
         <i class="bi bi-arrow-left" aria-hidden="true"></i> All treatment centers
       </router-link>
 
-      <div v-if="center" class="sheet">
+      <div v-if="loading" class="text-center text-muted py-5">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <p class="mt-2 mb-0">Loading the treatment center...</p>
+      </div>
+
+      <div v-else-if="error" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+        Could not load the treatment center: {{ error }}
+      </div>
+
+      <div v-else-if="center" class="sheet">
         <div class="center-head">
           <span class="center-city">{{ center.city }}</span>
           <span :class="['center-state', center.is_active ? 'on' : 'off']">
@@ -32,7 +42,7 @@
           <dt>Opened</dt>
           <dd>{{ formatDate(center.opening_date) }}</dd>
           <dt>Collections</dt>
-          <dd>{{ collectionCount }}</dd>
+          <dd>{{ center.collection_count }}</dd>
         </dl>
 
         <ItemActions
@@ -63,11 +73,9 @@
 import sections from '@/sections'
 import PageHeader from '@/components/PageHeader.vue'
 import ItemActions from '@/components/ItemActions.vue'
-// Fake JSON data: same field names as the treatment_center, collection_point
-// and collection tables
-import centersData from '../../../data/treatment_centers.json'
-import pointsData from '../../../data/collection_points.json'
-import collectionsData from '../../../data/collections.json'
+// Data comes from MySQL through the server:
+// GET /api/treatment-centers/:id and GET /api/treatment-centers/:id/collection-points
+import { treatmentCentersApi } from '@/services/api'
 
 export default {
   name: 'TreatmentCenterView',
@@ -77,18 +85,36 @@ export default {
       section: sections.find((s) => s.name === 'treatment-centers'),
       center: null,
       points: [],
-      collectionCount: 0
+      loading: true,
+      error: null
     }
   },
   methods: {
-    getData() {
-      // Later: replaced by fetch() calls to the server
-      const id = Number(this.$route.params.id)
-      this.center = centersData.find((c) => c.center_id === id) || null
-      this.points = pointsData.filter((p) => p.center_id === id)
-      this.collectionCount = collectionsData.filter((c) => c.center_id === id).length
+    async getData() {
+      this.loading = true
+      this.error = null
+      const id = this.$route.params.id
+      try {
+        const [center, points] = await Promise.all([
+          treatmentCentersApi.getById(id),
+          treatmentCentersApi.getPoints(id)
+        ])
+        this.center = center
+        this.points = points
+      } catch (err) {
+        // 404: the "no treatment center" message is shown instead of an error
+        if (err.status !== 404) {
+          this.error = err.message
+        }
+        this.center = null
+      } finally {
+        this.loading = false
+      }
     },
     formatDate(iso) {
+      if (!iso) {
+        return '-'
+      }
       return new Date(iso).toLocaleDateString('en-GB', {
         day: 'numeric',
         month: 'long',
